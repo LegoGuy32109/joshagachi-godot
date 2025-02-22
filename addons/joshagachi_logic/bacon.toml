@@ -1,0 +1,14 @@
+default_job = "build"
+env.CARGO_TERM_COLOR = "always"
+
+[jobs.build]
+command = ["cargo", "build"]
+
+[jobs.web]
+command = ["cargo", "+nightly", "build", "--features", "nothreads", "-Zbuild-std", "--target", "wasm32-unknown-emscripten"]
+need_stdout = true
+
+[jobs.web_threads]
+command = ["RUSTFLAGS=\"-C link-args=-pthread\"", "cargo", "+nightly", "build", "-Zbuild-std", "--target", "wasm32-unknown-emscripten", "REN", "target/debug/joshagachi_logic.wasm", "joshagachi_logic.threads.wasm"]
+need_stdout = true
+

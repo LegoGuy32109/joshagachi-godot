@@ -1,0 +1,15 @@
+[package]
+name = "joshagachi_logic"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies.godot]
+git = "https://github.com/godot-rust/gdext"
+branch = "master"
+features = ["experimental-wasm", "lazy-function-tables", "register-docs"]
+
+[features]
+nothreads = ["godot/experimental-wasm-nothreads"]
