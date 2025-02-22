@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://djadbqbt76p6g"]
+[gd_scene load_steps=8 format=3 uid="uid://djadbqbt76p6g"]
 
 [ext_resource type="Texture2D" uid="uid://c87bhvqcrq47s" path="res://assets/TempTitle.png" id="1_4xr77"]
+[ext_resource type="PackedScene" uid="uid://dx6ffqan60mgx" path="res://joshagachi_icon.tscn" id="2_sb87o"]
 [ext_resource type="Texture2D" uid="uid://kbq3s48hhh1x" path="res://assets/Blob/default.png" id="2_sw3s3"]
 [ext_resource type="Texture2D" uid="uid://dy7vbd5dkxod1" path="res://assets/Ghost/default.png" id="3_f8670"]
 [ext_resource type="Texture2D" uid="uid://bqo1twrdxnpam" path="res://assets/Octopus/default.png" id="4_6vutp"]
@@ -53,6 +54,7 @@ color = Color(0.47, 0.2444, 0.2444, 1)
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+vertical_scroll_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -60,117 +62,24 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
 
-[node name="joshagachi_icon" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon/PanelContainer/MarginContainer"]
+[node name="joshagachi_icon" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("2_sw3s3")
-expand_mode = 5
 
-[node name="joshagachi_icon2" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon2"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon2/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon2/PanelContainer/MarginContainer"]
+[node name="joshagachi_icon2" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("3_f8670")
-expand_mode = 5
 
-[node name="joshagachi_icon3" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon3"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon3/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon3/PanelContainer/MarginContainer"]
+[node name="joshagachi_icon3" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("4_6vutp")
-expand_mode = 5
 
-[node name="joshagachi_icon4" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon4"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon4/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon4/PanelContainer/MarginContainer"]
+[node name="joshagachi_icon4" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("5_hqod7")
-expand_mode = 5
 
-[node name="joshagachi_icon5" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon5"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon5/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon5/PanelContainer/MarginContainer"]
+[node name="joshagachi_icon5" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("6_jk1pj")
-expand_mode = 5
+
+[editable path="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon"]
