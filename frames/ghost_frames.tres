@@ -1,0 +1,137 @@
+[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://bcg301e1wt5xr"]
+
+[ext_resource type="Texture2D" uid="uid://dy7vbd5dkxod1" path="res://assets/Ghost/default.png" id="1_0dhqt"]
+[ext_resource type="Texture2D" uid="uid://35k2wv0tixgk" path="res://assets/Ghost/eating1.png" id="2_5vaum"]
+[ext_resource type="Texture2D" uid="uid://bqwotg0oo851" path="res://assets/Ghost/eating2.png" id="3_37prv"]
+[ext_resource type="Texture2D" uid="uid://deafxemhe26jy" path="res://assets/Ghost/full1.png" id="4_h4y8v"]
+[ext_resource type="Texture2D" uid="uid://bvg1jpf7sjfox" path="res://assets/Ghost/full2.png" id="5_c3fs2"]
+[ext_resource type="Texture2D" uid="uid://d1lf7mqi6673t" path="res://assets/Ghost/hungry1.png" id="6_8x4cp"]
+[ext_resource type="Texture2D" uid="uid://bvjfkch85ao07" path="res://assets/Ghost/hungry2.png" id="7_l5b3j"]
+[ext_resource type="Texture2D" uid="uid://b6of518emtbix" path="res://assets/Ghost/sad1.png" id="8_gcqy4"]
+[ext_resource type="Texture2D" uid="uid://b26u0tfixbtrs" path="res://assets/Ghost/sad2.png" id="9_8srrp"]
+[ext_resource type="Texture2D" uid="uid://b8hpo6kcm8r64" path="res://assets/Ghost/tired1.png" id="10_gqpo1"]
+[ext_resource type="Texture2D" uid="uid://cge7mh7p2ojuj" path="res://assets/Ghost/tired2.png" id="11_jcd5b"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0dhqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_5vaum")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_37prv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_h4y8v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_c3fs2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_8x4cp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_l5b3j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_gcqy4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_8srrp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_gqpo1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_jcd5b")
+}],
+"loop": true,
+"name": &"all",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0dhqt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_5vaum")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_37prv")
+}],
+"loop": true,
+"name": &"eat",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_h4y8v")
+}],
+"loop": true,
+"name": &"full1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_c3fs2")
+}],
+"loop": true,
+"name": &"full2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_8x4cp")
+}],
+"loop": true,
+"name": &"hungry1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_l5b3j")
+}],
+"loop": true,
+"name": &"hungry2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_gcqy4")
+}],
+"loop": true,
+"name": &"sad1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_8srrp")
+}],
+"loop": true,
+"name": &"sad2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_gqpo1")
+}],
+"loop": true,
+"name": &"tired1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_jcd5b")
+}],
+"loop": true,
+"name": &"tired2",
+"speed": 5.0
+}]

@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4i5nrnfck28x"]
+
+[ext_resource type="SpriteFrames" uid="uid://bkleomjhay6wd" path="res://frames/blob_frames.tres" id="1_3670i"]
+[ext_resource type="Script" path="res://default_screen.gd" id="1_sggsy"]
+
+[node name="default_screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sggsy")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.361566, 0.60522, 0.486609, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.118056
+anchor_top = 0.180469
+anchor_right = 0.894444
+anchor_bottom = 0.83125
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Your Joshagachi"
+
+[node name="Control" type="ColorRect" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+color = Color(1, 1, 1, 0.160784)
+
+[node name="Joshagachi" type="AnimatedSprite2D" parent="CenterContainer/VBoxContainer/Control"]
+unique_name_in_owner = true
+position = Vector2(150, 150)
+scale = Vector2(2.25, 2.25)
+sprite_frames = ExtResource("1_3670i")
+animation = &"all"
+autoplay = "all"
