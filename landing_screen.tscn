@@ -1,7 +1,45 @@
-[gd_scene load_steps=6 format=3 uid="uid://dm8v4fap8w68b"]
+[gd_scene load_steps=5 format=3 uid="uid://dm8v4fap8w68b"]
 
-[ext_resource type="Script" path="res://title.gd" id="1_uq1ri"]
 [ext_resource type="Script" path="res://select_pet_button.gd" id="2_12ati"]
+
+[sub_resource type="Animation" id="Animation_5eo36"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_constants/shadow_offset_x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [15]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:theme_override_constants/shadow_offset_y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [20]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_6sc0x"]
 resource_name = "title_label"
@@ -42,45 +80,6 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.915, 1.305), Vector2(1.207, 0.852), Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_5eo36"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:theme_override_constants/shadow_offset_x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [15]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:theme_override_constants/shadow_offset_y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [20]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hcbpj"]
@@ -129,7 +128,6 @@ theme_override_constants/outline_size = 50
 theme_override_font_sizes/font_size = 100
 text = "Joshagachi!"
 horizontal_alignment = 1
-script = ExtResource("1_uq1ri")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Title"]
 libraries = {
@@ -148,7 +146,7 @@ metadata/_edit_lock_ = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 180
+theme_override_constants/separation = 40
 
 [node name="title_blank" type="Label" parent="CenterContainer/VBoxContainer2"]
 unique_name_in_owner = true
@@ -185,6 +183,7 @@ text = "Select Pet"
 script = ExtResource("2_12ati")
 
 [node name="Button2" type="Button" parent="CenterContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "View Josh's Website"

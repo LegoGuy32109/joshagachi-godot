@@ -4,13 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://kbq3s48hhh1x" path="res://assets/Blob/default.png" id="1_w5l5k"]
 
 [node name="AspectRatioContainer" type="AspectRatioContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 373.0
+offset_bottom = 379.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
 alignment_horizontal = 0
 alignment_vertical = 0
 script = ExtResource("1_ukni5")
@@ -18,7 +14,6 @@ script = ExtResource("1_ukni5")
 [node name="joshagachi_icon" type="MarginContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
@@ -54,5 +49,5 @@ unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("1_w5l5k")
-expand_mode = 1
+expand_mode = 4
 stretch_mode = 4
