@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dm8v4fap8w68b"]
 
-[ext_resource type="Script" path="res://select_pet_button.gd" id="2_12ati"]
+[ext_resource type="Script" uid="uid://bh5j3po48hhbm" path="res://select_pet_button.gd" id="2_12ati"]
 
 [sub_resource type="Animation" id="Animation_5eo36"]
 length = 0.001
@@ -84,8 +84,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hcbpj"]
 _data = {
-"RESET": SubResource("Animation_5eo36"),
-"title_label": SubResource("Animation_6sc0x")
+&"RESET": SubResource("Animation_5eo36"),
+&"title_label": SubResource("Animation_6sc0x")
 }
 
 [node name="Landing Screen" type="Control"]
@@ -131,7 +131,7 @@ horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Title"]
 libraries = {
-"": SubResource("AnimationLibrary_hcbpj")
+&"": SubResource("AnimationLibrary_hcbpj")
 }
 autoplay = "title_label"
 

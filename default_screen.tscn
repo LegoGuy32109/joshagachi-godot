@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b4i5nrnfck28x"]
 
 [ext_resource type="SpriteFrames" uid="uid://bkleomjhay6wd" path="res://frames/blob_frames.tres" id="1_3670i"]
-[ext_resource type="Script" path="res://default_screen.gd" id="1_sggsy"]
+[ext_resource type="Script" uid="uid://7r0yp2qjl7jk" path="res://default_screen.gd" id="1_sggsy"]
 
 [node name="default_screen" type="Control"]
 layout_mode = 3
