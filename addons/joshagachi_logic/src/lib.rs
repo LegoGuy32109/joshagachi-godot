@@ -17,8 +17,9 @@ struct Monster {
 #[godot_api]
 impl INode2D for Monster {
     fn init(base: Base<Node2D>) -> Self {
+        godot_print!("rust node was initialized");
         Self {
-            name: "< Mystery Monster >".into(),
+            name: "< Mystery Monster Dude >".into(),
             hitpoints: 100,
             base,
         }

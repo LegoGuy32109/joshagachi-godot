@@ -1,4 +1,4 @@
-default_job = "build"
+default_job = "web"
 env.CARGO_TERM_COLOR = "always"
 
 [jobs.build]
@@ -12,3 +12,17 @@ need_stdout = true
 command = ["RUSTFLAGS=\"-C link-args=-pthread\"", "cargo", "+nightly", "build", "-Zbuild-std", "--target", "wasm32-unknown-emscripten", "REN", "target/debug/joshagachi_logic.wasm", "joshagachi_logic.threads.wasm"]
 need_stdout = true
 
+[jobs.export]
+command = ["$godot4", "--path", "../..", "--headless", "--export-debug", "Web" ]
+need_stdout = true
+watch = ["../../assets/", "../../app"]
+
+# Vim like keybindings
+[keybindings]
+esc = "back"
+g = "scroll-to-top"
+shift-g = "scroll-to-bottom"
+k = "scroll-lines(-1)"
+j = "scroll-lines(1)"
+ctrl-u = "scroll-page(-1)"
+ctrl-d = "scroll-page(1)"

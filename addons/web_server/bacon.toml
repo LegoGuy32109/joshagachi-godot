@@ -1,0 +1,13 @@
+default_job = "run"
+env.CARGO_TERM_COLOR = "always"
+
+# 'on_change_strategy' is set to `kill_then_restart` to have your program restart
+# on every change (an alternative would be to use the 'F5' key manually in bacon).
+# If you often use this job, it makes sense to override the 'r' key by adding
+# a binding `r = job:run-long` at the end of this file .
+[jobs.run]
+command = [ "cargo", "run" ]
+need_stdout = true
+allow_warnings = true
+background = false
+on_change_strategy = "kill_then_restart"
