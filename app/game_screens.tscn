@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqn5gqxjeu3cy"]
+
+[ext_resource type="Script" uid="uid://gifhg2nshjw1" path="res://app/game_screens.gd" id="1_m511r"]
+[ext_resource type="PackedScene" uid="uid://dm8v4fap8w68b" path="res://app/landing_screen.tscn" id="1_qatk7"]
+
+[node name="game_screens" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m511r")
+
+[node name="background" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.654607, 0.80534, 1)
+
+[node name="landing_screen" parent="." instance=ExtResource("1_qatk7")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5

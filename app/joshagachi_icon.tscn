@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://dx6ffqan60mgx"]
+[gd_scene load_steps=2 format=3 uid="uid://dx6ffqan60mgx"]
 
-[ext_resource type="Script" uid="uid://be5koqxagem16" path="res://app/joshagachi_icon.gd" id="1_ukni5"]
 [ext_resource type="Texture2D" uid="uid://kbq3s48hhh1x" path="res://assets/Blob/default.png" id="1_w5l5k"]
 
 [node name="AspectRatioContainer" type="AspectRatioContainer"]
@@ -9,7 +8,6 @@ offset_bottom = 379.0
 size_flags_horizontal = 3
 alignment_horizontal = 0
 alignment_vertical = 0
-script = ExtResource("1_ukni5")
 
 [node name="joshagachi_icon" type="MarginContainer" parent="."]
 layout_mode = 2

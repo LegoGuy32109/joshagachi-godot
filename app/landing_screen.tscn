@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dm8v4fap8w68b"]
 
-[ext_resource type="Script" uid="uid://bh5j3po48hhbm" path="res://app/select_pet_button.gd" id="2_12ati"]
+[ext_resource type="Script" uid="uid://w17kdfe3j40m" path="res://app/link_to_website_button.gd" id="2_u2pgt"]
 
 [sub_resource type="Animation" id="Animation_5eo36"]
 length = 0.001
@@ -96,15 +96,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.533333, 0.745098, 1, 1)
-
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -135,58 +126,34 @@ libraries = {
 }
 autoplay = "title_label"
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.5
+offset_top = -39.455
+offset_right = 240.5
+offset_bottom = 152.545
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer"]
-layout_mode = 2
-theme_override_constants/separation = 40
-
-[node name="title_blank" type="Label" parent="CenterContainer/VBoxContainer2"]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1.49205e-06, 0, 0.511278, 1)
-theme_override_colors/font_outline_color = Color(0.466667, 0.00392157, 0.470588, 0.737255)
-theme_override_constants/shadow_offset_x = 15
-theme_override_constants/shadow_offset_y = 20
-theme_override_constants/outline_size = 50
-theme_override_font_sizes/font_size = 100
-text = "Joshagachi!"
-horizontal_alignment = 1
-metadata/_edit_lock_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_right = 60
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer2/MarginContainer"]
-layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 22
 
-[node name="select_pet_button" type="Button" parent="CenterContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
+[node name="start_game_button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
-text = "Select Pet"
-script = ExtResource("2_12ati")
+text = "Start Game"
 
-[node name="Button2" type="Button" parent="CenterContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
+[node name="link_to_website_button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "View Josh's Website"
+script = ExtResource("2_u2pgt")
 
 [node name="Monster" type="Monster" parent="."]
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer2/MarginContainer/VBoxContainer/select_pet_button" to="CenterContainer/VBoxContainer2/MarginContainer/VBoxContainer/select_pet_button" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/link_to_website_button" to="VBoxContainer/link_to_website_button" method="_on_pressed"]
