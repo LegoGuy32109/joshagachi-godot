@@ -20,7 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.654607, 0.80534, 1)
+color = Color(0.588735, 0.805941, 0.958565, 1)
 
 [node name="landing_screen" parent="." instance=ExtResource("1_qatk7")]
 layout_mode = 1
