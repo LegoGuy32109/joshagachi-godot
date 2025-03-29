@@ -14,12 +14,18 @@ var texture: Texture2D:
 		species_name = name
 		texture = load("res://assets/%s/default.png" % [name])
 
-func _ready(): 
-	%select_button.connect("pressed", _on_select_button_pressed)
+@export_color_no_alpha var species_color: Color:
+	set(color):
+		species_color = color
 
+var game_screens: GameScreens
+
+func _ready():
+	%select_button.connect("pressed", _on_select_button_pressed)
+	game_screens = get_tree().current_scene
+
+# Emit signal to parent screens scene to handle transition with new Node
 func _on_select_button_pressed():
-	print(species_name)
 	var default_scene = load("uid://b4i5nrnfck28x").instantiate()
 	default_scene.species = species_name
-	get_tree().current_scene.queue_free()
-	get_tree().root.add_child(default_scene)
+	game_screens.change_scenes.emit(self.get_parent().get_parent().get_parent().get_parent().get_parent(), default_scene, species_color)
