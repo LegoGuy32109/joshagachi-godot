@@ -1,14 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://djadbqbt76p6g"]
+[gd_scene load_steps=8 format=3 uid="uid://djadbqbt76p6g"]
 
 [ext_resource type="Texture2D" uid="uid://c87bhvqcrq47s" path="res://assets/TempTitle.png" id="1_4xr77"]
 [ext_resource type="PackedScene" uid="uid://dx6ffqan60mgx" path="res://app/joshagachi_icon.tscn" id="2_sb87o"]
-[ext_resource type="Script" uid="uid://k23jrvojnlg2" path="res://app/grid_container_keep_square.gd" id="2_tpcp2"]
-[ext_resource type="Script" uid="uid://be5koqxagem16" path="res://app/joshagachi_icon.gd" id="4_fa0d1"]
-[ext_resource type="Texture2D" uid="uid://kbq3s48hhh1x" path="res://assets/Blob/default.png" id="4_xwog1"]
-[ext_resource type="Texture2D" uid="uid://dy7vbd5dkxod1" path="res://assets/Ghost/default.png" id="5_x6fqy"]
-[ext_resource type="Texture2D" uid="uid://bqo1twrdxnpam" path="res://assets/Octopus/default.png" id="6_1ta4e"]
-[ext_resource type="Texture2D" uid="uid://bfh4w6t7u7nnt" path="res://assets/Pumpkin/default.png" id="7_pw87d"]
-[ext_resource type="Texture2D" uid="uid://djlcb2ls60wx2" path="res://assets/Snake/default.png" id="8_v2d5g"]
+[ext_resource type="Texture2D" uid="uid://kbq3s48hhh1x" path="res://assets/Blob/default.png" id="3_nnuxe"]
+[ext_resource type="Texture2D" uid="uid://dy7vbd5dkxod1" path="res://assets/Ghost/default.png" id="4_quvbi"]
+[ext_resource type="Texture2D" uid="uid://djlcb2ls60wx2" path="res://assets/Snake/default.png" id="5_prget"]
+[ext_resource type="Texture2D" uid="uid://bqo1twrdxnpam" path="res://assets/Octopus/default.png" id="6_e50lc"]
+[ext_resource type="Texture2D" uid="uid://bfh4w6t7u7nnt" path="res://assets/Pumpkin/default.png" id="7_fa0d1"]
 
 [node name="joshagachi_grid" type="Control"]
 layout_mode = 3
@@ -35,24 +33,19 @@ offset_right = 356.5
 offset_bottom = 605.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 40
+theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 40
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 24
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 texture = ExtResource("1_4xr77")
 expand_mode = 5
-
-[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(500, 4)
-layout_mode = 2
-size_flags_horizontal = 4
-color = Color(0.47, 0.2444, 0.2444, 1)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -62,47 +55,36 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 15
 columns = 2
-script = ExtResource("2_tpcp2")
 
 [node name="joshagachi_icon" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
-custom_minimum_size = Vector2(0, 373)
 layout_mode = 2
-script = ExtResource("4_fa0d1")
-texture = ExtResource("4_xwog1")
+texture = ExtResource("3_nnuxe")
 species_name = "Blob"
-species_color = Color(0.6, 0.941176, 0.14902, 1)
+species_color = Color(0.6, 0.898039, 0.313726, 1)
 
 [node name="joshagachi_icon2" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
-custom_minimum_size = Vector2(0, 373)
 layout_mode = 2
-script = ExtResource("4_fa0d1")
-texture = ExtResource("5_x6fqy")
+texture = ExtResource("4_quvbi")
 species_name = "Ghost"
-species_color = Color(0.489622, 0.489622, 0.489622, 1)
+species_color = Color(0.513233, 0.513233, 0.513233, 1)
 
 [node name="joshagachi_icon3" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
-custom_minimum_size = Vector2(0, 373)
 layout_mode = 2
-script = ExtResource("4_fa0d1")
-texture = ExtResource("8_v2d5g")
+texture = ExtResource("5_prget")
 species_name = "Snake"
-species_color = Color(0.314644, 0.535088, 0.153087, 1)
+species_color = Color(0.415686, 0.745098, 0.188235, 1)
 
 [node name="joshagachi_icon4" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
-custom_minimum_size = Vector2(0, 373)
 layout_mode = 2
-script = ExtResource("4_fa0d1")
-texture = ExtResource("6_1ta4e")
+texture = ExtResource("6_e50lc")
 species_name = "Octopus"
-species_color = Color(0.282353, 0.447059, 0.796078, 1)
+species_color = Color(0.247059, 0.247059, 0.454902, 1)
 
 [node name="joshagachi_icon5" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
-custom_minimum_size = Vector2(0, 373)
 layout_mode = 2
-script = ExtResource("4_fa0d1")
-texture = ExtResource("7_pw87d")
+texture = ExtResource("7_fa0d1")
 species_name = "Pumpkin"
-species_color = Color(0.533333, 0.317647, 0.0352941, 1)
-
-[editable path="MarginContainer/VBoxContainer/ScrollContainer/GridContainer/joshagachi_icon"]
+species_color = Color(0.657836, 0.334336, 0.111565, 1)

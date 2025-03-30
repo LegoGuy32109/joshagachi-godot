@@ -1,5 +1,5 @@
 @tool
-extends Container
+extends Control
 
 @export
 var texture: Texture2D:

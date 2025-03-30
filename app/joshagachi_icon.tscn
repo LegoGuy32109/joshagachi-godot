@@ -1,51 +1,38 @@
-[gd_scene load_steps=2 format=3 uid="uid://dx6ffqan60mgx"]
+[gd_scene load_steps=3 format=3 uid="uid://dx6ffqan60mgx"]
 
+[ext_resource type="Script" uid="uid://be5koqxagem16" path="res://app/joshagachi_icon.gd" id="1_aynbq"]
 [ext_resource type="Texture2D" uid="uid://kbq3s48hhh1x" path="res://assets/Blob/default.png" id="1_w5l5k"]
 
-[node name="AspectRatioContainer" type="AspectRatioContainer"]
-offset_right = 373.0
-offset_bottom = 379.0
-size_flags_horizontal = 3
-alignment_horizontal = 0
-alignment_vertical = 0
-
-[node name="joshagachi_icon" type="MarginContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-metadata/_edit_use_anchors_ = true
-
-[node name="Control" type="Control" parent="joshagachi_icon"]
-layout_mode = 2
-
-[node name="select_button" type="Button" parent="joshagachi_icon/Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="joshagachi_icon/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CenterContainer" type="Container"]
+custom_minimum_size = Vector2(320, 320)
+offset_right = 320.0
+offset_bottom = 320.0
 mouse_filter = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+script = ExtResource("1_aynbq")
 
-[node name="joshagachi_texture_rect" type="TextureRect" parent="joshagachi_icon/Control/MarginContainer"]
+[node name="select_button" type="Button" parent="."]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="joshagachi_texture_rect" type="TextureRect" parent="MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 mouse_filter = 2
 texture = ExtResource("1_w5l5k")
 expand_mode = 4
