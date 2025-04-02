@@ -5,6 +5,9 @@ struct MyExtension;
 #[gdextension]
 unsafe impl ExtensionLibrary for MyExtension {}
 
+//mod game_screens;
+//use game_screens::GameScreens;
+
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct Monster {
