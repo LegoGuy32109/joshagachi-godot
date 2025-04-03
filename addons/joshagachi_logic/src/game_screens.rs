@@ -5,20 +5,20 @@ use godot::{
 
 #[derive(GodotClass)]
 #[class(base=Control)]
-pub struct GameScreens {
+pub struct GameScreens2 {
     screen_dimensions: Vector2,
-    viewport_dimensions: Vector2,
+    viewport_dimensions: Vector2i,
     base: Base<Control>,
 }
 
 #[godot_api]
-impl IControl for GameScreens {
+impl IControl for GameScreens2 {
     fn init(base: Base<Control>) -> Self {
         let project_settings = ProjectSettings::singleton();
         let display_server = DisplayServer::singleton();
         Self {
             screen_dimensions: display_server.screen_get_size().cast_float(),
-            viewport_dimensions: Vector2::new(
+            viewport_dimensions: Vector2i::new(
                 project_settings
                     .get_setting("display/window/size/viewport_width")
                     .to(),
@@ -48,7 +48,7 @@ impl IControl for GameScreens {
         start_game_button
             .signals()
             .pressed()
-            .connect_obj(&self.to_gd(), GameScreens::_on_start_game_button_pressed)
+            .connect_obj(&self.to_gd(), GameScreens2::_on_start_game_button_pressed)
         //.connect_obj(&self.to_gd(), |game_screen: &mut Self| {
         //    godot_print!("start game button pressed!")
         //})
@@ -56,7 +56,7 @@ impl IControl for GameScreens {
 }
 
 #[godot_api]
-impl GameScreens {
+impl GameScreens2 {
     #[signal]
     fn change_scenes(scene_from: Gd<Node>, scene_to: Gd<Node>);
 

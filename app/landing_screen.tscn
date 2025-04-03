@@ -154,6 +154,4 @@ theme_override_font_sizes/font_size = 50
 text = "View Josh's Website"
 script = ExtResource("2_u2pgt")
 
-[node name="Monster" type="Monster" parent="."]
-
 [connection signal="pressed" from="VBoxContainer/link_to_website_button" to="VBoxContainer/link_to_website_button" method="_on_pressed"]

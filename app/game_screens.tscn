@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://dqn5gqxjeu3cy"]
+[gd_scene load_steps=2 format=3 uid="uid://dqn5gqxjeu3cy"]
 
-[ext_resource type="Script" uid="uid://gifhg2nshjw1" path="res://app/game_screens.gd" id="1_m511r"]
 [ext_resource type="PackedScene" uid="uid://dm8v4fap8w68b" path="res://app/landing_screen.tscn" id="1_qatk7"]
 
 [node name="game_screens" type="Control"]
@@ -10,7 +9,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_m511r")
 
 [node name="background" type="ColorRect" parent="."]
 unique_name_in_owner = true

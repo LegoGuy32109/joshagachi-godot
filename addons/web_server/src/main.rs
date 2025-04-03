@@ -25,6 +25,9 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("\nlistening on [[ http://{} ]] <| Shift+Click Me!", listener.local_addr().unwrap());
+    println!(
+        "\nlistening on [[ http://{} ]] <| Shift+Click Me!",
+        listener.local_addr().unwrap()
+    );
     axum::serve(listener, app).await.unwrap();
 }
