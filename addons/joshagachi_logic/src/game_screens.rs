@@ -32,6 +32,7 @@ impl IControl for GameScreens {
                     .to(),
             )
             .cast_float(),
+
             base,
         }
     }
@@ -44,13 +45,13 @@ impl IControl for GameScreens {
         godot_print!("Actual Resolution: {}", self.screen_dimensions);
 
         // Find nodes in scene tree
-        let mut landing_screen =
-            find_node_on::<Self, Control>(&game_screens, "%landing_screen", "Control")
-                .expect("issue finding %landing_screen");
+        let mut landing_screen = game_screens
+            .find_node_on::<Control>("%landing_screen")
+            .expect("issue finding %landing_screen");
 
-        let mut start_game_button =
-            find_node_on::<Control, BaseButton>(&landing_screen, "%start_game_button", "Button")
-                .expect("issue finding %start_game_button");
+        let mut start_game_button = landing_screen
+            .find_node_on::<BaseButton>("%start_game_button")
+            .expect("issue finding %start_game_button");
 
         // Attach signals
         start_game_button
@@ -135,6 +136,7 @@ impl GameScreens {
         let list_node: Gd<Node> = load::<PackedScene>("uid://djadbqbt76p6g")
             .instantiate()
             .expect("no list_node scene found to be loaded");
+
         let current_focus_node: Gd<Node> = self
             .to_gd()
             .get_children()
@@ -148,7 +150,9 @@ impl GameScreens {
     fn change_background(&self, color: Color, duration: f64) {
         let mut background_tween = create_tween(self.to_gd(), TransitionType::LINEAR, EaseType::IN);
         background_tween.tween_property(
-            &find_node_on::<Self, ColorRect>(&self.to_gd(), "%background", "ColorRect")
+            &self
+                .to_gd()
+                .find_node_on::<ColorRect>("%background")
                 .expect("issue finding %background"),
             "modulate",
             &color.to_variant(),
@@ -165,32 +169,43 @@ fn create_tween<T: Inherits<Node>>(
     godot_ref
         .upcast_ref()
         .get_tree()
-        .expect("failed to aquire tree in GameScreens")
+        .expect("failed to aquire tree")
         .create_tween()
-        .expect("failed to create tween in GameScreens")
+        .expect("failed to create tween")
         .set_trans(transition_type)
-        .expect("failed to set transition for tween in GameScreens")
+        .expect("failed to set transition for tween")
         .set_ease(ease_type)
-        .expect("failed to set ease for tween in GameScreens")
+        .expect("failed to set ease for tween")
 }
 
-// WARN: use absolute path or unique name (%node_name)
-fn find_node_on<'a, T: Inherits<Node>, K: Inherits<Node>>(
-    node: &Gd<T>,
-    node_path: &'a str,
-    expected_node_type: &'a str,
-) -> Result<Gd<K>, String> {
-    match node.upcast_ref().get_node_or_null(node_path) {
-        Some(node_found) => match node_found.try_cast::<K>() {
-            Ok(correct_node) => Ok(correct_node),
-            Err(node_with_wrong_type) => {
-                return Err(format!(
-                    "{node_path} is not a {expected_node_type}, found {node_with_wrong_type}"
-                ));
-            }
-        },
-        None => {
-            return Err(format!("{node_path} not found in scene"));
+trait FindNodeable {
+    fn find_node_on<K: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<K>, String>;
+}
+
+impl<T: Inherits<Node>> FindNodeable for Gd<T> {
+    /// Access node at given node_path relative to node method is called under.
+    /// NOTE: can use unique names (%node_name)
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the node path does not lead to an existing node,
+    /// or the node's type is invalid.
+    ///
+    /// # Example
+    /// ```
+    /// let button = some_parent_node.find_node_on::<BaseButton>("%button")
+    ///     .expect("issue finding %button");
+    /// ```
+    fn find_node_on<K: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<K>, String> {
+        match self.upcast_ref::<Node>().get_node_or_null(node_path) {
+            Some(node_found) => match node_found.try_cast::<K>() {
+                Ok(correct_node) => Ok(correct_node),
+                Err(node_with_wrong_type) => Err(format!(
+                    "{node_path} is not a {}, found {node_with_wrong_type}",
+                    std::any::type_name::<K>()
+                )),
+            },
+            None => Err(format!("{node_path} not found in scene")),
         }
     }
 }
