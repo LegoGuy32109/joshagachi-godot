@@ -2,8 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dm8v4fap8w68b" path="res://app/landing_screen.tscn" id="1_qatk7"]
 
-[node name="game_screens" type="Control"]
-layout_mode = 3
+[node name="game_screens" type="GameScreens"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,6 +20,7 @@ grow_vertical = 2
 color = Color(0.588735, 0.805941, 0.958565, 1)
 
 [node name="landing_screen" parent="." instance=ExtResource("1_qatk7")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

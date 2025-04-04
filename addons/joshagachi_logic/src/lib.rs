@@ -1,9 +1,8 @@
 use godot::prelude::*;
 
+mod game_screens;
+
 struct MyExtension;
 
 #[gdextension]
 unsafe impl ExtensionLibrary for MyExtension {}
-
-mod game_screens;
-use game_screens::GameScreens2;
