@@ -1,10 +1,8 @@
 use crate::PackedScene;
-use crate::view::View;
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
     BaseButton, ColorRect, Control, DisplayServer, IControl, ProjectSettings, Tween,
 };
-use godot::global::MouseButtonMask;
 use godot::obj::WithUserSignals;
 use godot::prelude::*;
 
@@ -98,31 +96,21 @@ impl GameScreens {
 
         // positions stored as variant references for tween_property arguments
         let new_focus_node_start_position =
-            &(viewport_dimensions * Vector2::new(1.5, 0.5)).to_variant();
+            &(viewport_dimensions * Vector2::new(1.6, 0.5)).to_variant();
         let screen_center_focus_position =
             &(viewport_dimensions * Vector2::new(0.5, 0.5)).to_variant();
         let current_focus_node_end_position =
-            &(viewport_dimensions * Vector2::new(-1.5, 0.5)).to_variant();
+            &(viewport_dimensions * Vector2::new(-0.6, 0.5)).to_variant();
 
-        // if moving nodes are views, disable interaction while moving
-        //current_focus_node = match current_focus_node.try_cast::<View>() {
-        //    Ok(view_node) => {
-        //        view_node
-        //            .bind()
-        //            .set_all_buttons_mouse_mask(MouseButtonMask::NONE);
-        //        view_node.upcast()
-        //    }
-        //    Err(node) => node,
-        //};
-        //new_focus_node = match new_focus_node.try_cast::<View>() {
-        //    Ok(view_node) => {
-        //        view_node
-        //            .bind()
-        //            .set_all_buttons_mouse_mask(MouseButtonMask::NONE);
-        //        view_node.upcast()
-        //    }
-        //    Err(node) => node,
-        //};
+        // disable interaction while moving current focus node away
+        // WARN: during animation the scale/position might offset the spawned control blocker
+        // leaving parts of a input intractable
+        let mut mouse_block_control: Gd<Control> = Control::new_alloc();
+        current_focus_node.add_child(&mouse_block_control);
+        mouse_block_control.set("offset_right", &viewport_dimensions.x.to_variant());
+        mouse_block_control.set("offset_bottom", &viewport_dimensions.y.to_variant());
+        mouse_block_control.set("global_position", &Vector2::ZERO.to_variant());
+        mouse_block_control.set("mouse_force_pass_scroll_events", &false.to_variant());
 
         let mut godot_ref = self.to_gd();
         godot_ref.add_child(&new_focus_node);
@@ -154,18 +142,6 @@ impl GameScreens {
             &current_focus_node,
             "queue_free",
         ));
-
-        // re-enable interactions for the new_focus_node if it's a view
-        //new_focus_node = match new_focus_node.try_cast::<View>() {
-        //    Ok(view_node) => {
-        //        godot_print!("re-enabling to left");
-        //        view_node
-        //            .bind()
-        //            .set_all_buttons_mouse_mask(MouseButtonMask::LEFT);
-        //        view_node.upcast()
-        //    }
-        //    Err(node) => node,
-        //};
 
         godot_print!(
             "{current_focus_node} moving from {} -> {current_focus_node_end_position}",
