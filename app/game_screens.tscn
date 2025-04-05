@@ -22,8 +22,3 @@ color = Color(0.588735, 0.805941, 0.958565, 1)
 [node name="landing_screen" parent="." instance=ExtResource("1_qatk7")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5

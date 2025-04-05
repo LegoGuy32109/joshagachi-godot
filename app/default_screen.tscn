@@ -2,7 +2,7 @@
 
 [ext_resource type="SpriteFrames" uid="uid://bkleomjhay6wd" path="res://assets/sprite_frames/blob_frames.tres" id="1_3670i"]
 [ext_resource type="Script" uid="uid://7r0yp2qjl7jk" path="res://app/default_screen.gd" id="1_sggsy"]
-[ext_resource type="Script" uid="uid://bl7gqtk4cjwt7" path="res://app/redo_selection_button.gd" id="3_bo1l1"]
+[ext_resource type="Script" uid="uid://bl7gqtk4cjwt7" path="res://app/button_scripts/redo_selection_button.gd" id="3_bo1l1"]
 
 [node name="default_screen" type="Control"]
 layout_mode = 3

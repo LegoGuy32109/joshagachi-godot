@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dm8v4fap8w68b"]
 
-[ext_resource type="Script" uid="uid://w17kdfe3j40m" path="res://app/link_to_website_button.gd" id="2_u2pgt"]
+[ext_resource type="Script" uid="uid://w17kdfe3j40m" path="res://app/button_scripts/link_to_website_button.gd" id="2_u2pgt"]
 
 [sub_resource type="Animation" id="Animation_5eo36"]
 length = 0.001
@@ -90,9 +90,11 @@ _data = {
 
 [node name="Landing Screen" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 

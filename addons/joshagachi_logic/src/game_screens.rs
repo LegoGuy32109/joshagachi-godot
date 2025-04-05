@@ -154,18 +154,46 @@ impl GameScreens {
     }
 
     fn _on_start_game_button_pressed(&mut self) {
-        let list_node: Gd<Node> = load::<PackedScene>("uid://djadbqbt76p6g")
+        let name_select_screen: Gd<Node> = load::<PackedScene>("uid://f6rye7ohvsw8")
             .instantiate()
-            .expect("no list_node scene found to be loaded");
+            .expect("no name_select_screen found to be loaded");
+
+        let mut name_confirm_button: Gd<BaseButton> = name_select_screen
+            .find_node_on("%name_confirm_button")
+            .expect("issue finding %name_confirm_button");
+
+        // TODO: better way of connecting scene transition graph
+        //let list_screen: Gd<Node> = load::<PackedScene>("uid://djadbqbt76p6g")
+        //    .instantiate()
+        //    .expect("no list_scene found to be loaded");
+
+        name_confirm_button
+            .signals()
+            .pressed()
+            .connect_obj(&self.to_gd(), |s: &mut Self| {
+                s._on_change_scenes(
+                    s.to_gd()
+                        .get_children()
+                        .back()
+                        .expect("no node found being focused"),
+                    load::<PackedScene>("uid://djadbqbt76p6g")
+                        .instantiate()
+                        .expect("no list_scene found to be loaded"),
+                    Color::LIGHT_STEEL_BLUE,
+                )
+            });
 
         let current_focus_node: Gd<Node> = self
             .to_gd()
             .get_children()
             .back()
-            .expect("no node found focused in GameScreens");
-        self.signals()
-            .change_scenes()
-            .emit(current_focus_node, list_node, Color::LIGHT_STEEL_BLUE);
+            .expect("no node found being focused");
+
+        self.signals().change_scenes().emit(
+            current_focus_node,
+            name_select_screen,
+            Color::PALE_GREEN,
+        );
     }
 
     fn change_background(&self, color: Color, duration: f64) {
