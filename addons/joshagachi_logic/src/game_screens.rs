@@ -1,12 +1,12 @@
 use crate::PackedScene;
-use godot::{
-    classes::{
-        BaseButton, ColorRect, Control, DisplayServer, IControl, ProjectSettings, Tween,
-        tween::{EaseType, TransitionType},
-    },
-    obj::WithUserSignals,
-    prelude::*,
+use crate::view::View;
+use godot::classes::tween::{EaseType, TransitionType};
+use godot::classes::{
+    BaseButton, ColorRect, Control, DisplayServer, IControl, ProjectSettings, Tween,
 };
+use godot::global::MouseButtonMask;
+use godot::obj::WithUserSignals;
+use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=Control)]
@@ -63,6 +63,10 @@ impl IControl for GameScreens {
             .connect_self(Self::_on_change_scenes);
 
         // Title Animation
+        landing_screen.set(
+            "position",
+            &(self.viewport_dimensions * Vector2::new(0.5, 0.5)).to_variant(),
+        );
         landing_screen.set("scale", &Vector2::ZERO.to_variant());
         let mut start_anim_tween =
             create_tween(game_screens, TransitionType::BOUNCE, EaseType::OUT);
@@ -73,29 +77,58 @@ impl IControl for GameScreens {
 #[godot_api]
 impl GameScreens {
     #[signal]
-    fn change_scenes(current_scene: Gd<Node>, new_scene: Gd<Node>, color: Color);
+    fn change_scenes(
+        current_focus_node: Gd<Node>,
+        new_focus_node: Gd<Node>,
+        new_background_color: Color,
+    );
 
     fn _on_change_scenes(
         &mut self,
-        current_focus_node: Gd<Node>,
+        mut current_focus_node: Gd<Node>,
         mut new_focus_node: Gd<Node>,
-        color: Color,
+        new_background_color: Color,
     ) {
+        let Self {
+            viewport_dimensions,
+            ..
+        } = *self;
         // in seconds
         let duration = 1.0;
 
-        let new_focus_node_start_position = self.viewport_dimensions * Vector2::new(1.5, 0.5);
-        let screen_center = self.viewport_dimensions * Vector2::new(0.5, 0.5);
-        let current_focus_node_end_position = self.viewport_dimensions * Vector2::new(-1.5, 0.5);
+        // positions stored as variant references for tween_property arguments
+        let new_focus_node_start_position =
+            &(viewport_dimensions * Vector2::new(1.5, 0.5)).to_variant();
+        let screen_center_focus_position =
+            &(viewport_dimensions * Vector2::new(0.5, 0.5)).to_variant();
+        let current_focus_node_end_position =
+            &(viewport_dimensions * Vector2::new(-1.5, 0.5)).to_variant();
+
+        // if moving nodes are views, disable interaction while moving
+        //current_focus_node = match current_focus_node.try_cast::<View>() {
+        //    Ok(view_node) => {
+        //        view_node
+        //            .bind()
+        //            .set_all_buttons_mouse_mask(MouseButtonMask::NONE);
+        //        view_node.upcast()
+        //    }
+        //    Err(node) => node,
+        //};
+        //new_focus_node = match new_focus_node.try_cast::<View>() {
+        //    Ok(view_node) => {
+        //        view_node
+        //            .bind()
+        //            .set_all_buttons_mouse_mask(MouseButtonMask::NONE);
+        //        view_node.upcast()
+        //    }
+        //    Err(node) => node,
+        //};
 
         let mut godot_ref = self.to_gd();
         godot_ref.add_child(&new_focus_node);
-        new_focus_node.set(
-            "global_position",
-            &new_focus_node_start_position.to_variant(),
-        );
+        new_focus_node.set("global_position", new_focus_node_start_position);
 
-        self.change_background(color, duration);
+        self.change_background(new_background_color, duration);
 
         let mut transition_anim_tween =
             create_tween(godot_ref, TransitionType::ELASTIC, EaseType::IN_OUT);
@@ -103,7 +136,7 @@ impl GameScreens {
         transition_anim_tween.tween_property(
             &current_focus_node,
             "global_position",
-            &current_focus_node_end_position.to_variant(),
+            current_focus_node_end_position,
             duration,
         );
         // new node off screen -> center screen
@@ -113,7 +146,7 @@ impl GameScreens {
             .tween_property(
                 &new_focus_node,
                 "global_position",
-                &screen_center.to_variant(),
+                screen_center_focus_position,
                 duration,
             );
         // delete old node now off screen
@@ -122,12 +155,24 @@ impl GameScreens {
             "queue_free",
         ));
 
+        // re-enable interactions for the new_focus_node if it's a view
+        //new_focus_node = match new_focus_node.try_cast::<View>() {
+        //    Ok(view_node) => {
+        //        godot_print!("re-enabling to left");
+        //        view_node
+        //            .bind()
+        //            .set_all_buttons_mouse_mask(MouseButtonMask::LEFT);
+        //        view_node.upcast()
+        //    }
+        //    Err(node) => node,
+        //};
+
         godot_print!(
             "{current_focus_node} moving from {} -> {current_focus_node_end_position}",
             current_focus_node.get("global_position")
         );
         godot_print!(
-            "{new_focus_node} moving from {} -> {screen_center}",
+            "{new_focus_node} moving from {} -> {screen_center_focus_position}",
             new_focus_node.get("global_position")
         );
     }
