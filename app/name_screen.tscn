@@ -168,4 +168,3 @@ text = "  That's me!  "
 script = ExtResource("1_165qs")
 
 [connection signal="editing_toggled" from="VBoxContainer/name_line_edit" to="VBoxContainer/name_confirm_button" method="_on_name_line_edit_editing_toggled"]
-[connection signal="text_changed" from="VBoxContainer/name_line_edit" to="VBoxContainer/name_confirm_button" method="_on_name_line_edit_text_changed"]

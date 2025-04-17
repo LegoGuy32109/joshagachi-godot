@@ -135,15 +135,6 @@ impl GameScreens {
             "queue_free",
         ));
 
-        godot_print!(
-            "{current_focus_node} moving from {} -> {current_focus_node_end_position}",
-            current_focus_node.get("global_position")
-        );
-        godot_print!(
-            "{new_focus_node} moving from {} -> {screen_center_focus_position}",
-            &new_focus_node.get("global_position")
-        );
-
         // snap new node into center if screen changed during animation
         transition_anim_tween.signals().finished().connect(move || {
             new_focus_node.set("global_position", &screen_center.get("global_position"))
