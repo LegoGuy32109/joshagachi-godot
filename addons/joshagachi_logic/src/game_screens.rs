@@ -1,6 +1,8 @@
+use crate::user::User;
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
-    BaseButton, ColorRect, Control, DisplayServer, IControl, Panel, ProjectSettings, Tween,
+    BaseButton, ColorRect, Control, DisplayServer, IControl, LineEdit, Panel, ProjectSettings,
+    Tween,
 };
 use godot::obj::WithUserSignals;
 use godot::prelude::*;
@@ -10,6 +12,7 @@ use godot::prelude::*;
 pub struct GameScreens {
     screen_dimensions: Vector2,
     viewport_dimensions: Vector2,
+    user: Option<User>,
     base: Base<Control>,
 }
 
@@ -29,7 +32,7 @@ impl IControl for GameScreens {
                     .to(),
             )
             .cast_float(),
-
+            user: None,
             base,
         }
     }
@@ -54,6 +57,9 @@ impl IControl for GameScreens {
         self.signals()
             .change_scenes()
             .connect_self(Self::_on_change_scenes);
+        self.signals()
+            .user_name_chosen()
+            .connect_self(Self::_on_user_name_chosen);
 
         // Title Animation
         landing_screen.set("scale", &Vector2::ZERO.to_variant());
@@ -148,27 +154,32 @@ impl GameScreens {
 
         let mut name_confirm_button: Gd<BaseButton> =
             name_select_screen.find_node("%name_confirm_button");
+        let name_line_edit: Gd<LineEdit> = name_select_screen.find_node("%name_line_edit");
 
         // TODO: better way of connecting scene transition graph
         //let list_screen: Gd<Node> = load::<PackedScene>("uid://djadbqbt76p6g")
         //    .instantiate()
         //    .expect("no list_scene found to be loaded");
 
-        name_confirm_button
-            .signals()
-            .pressed()
-            .connect_obj(&self.to_gd(), |s: &mut Self| {
-                s._on_change_scenes(
-                    s.to_gd()
-                        .get_children()
-                        .back()
-                        .expect("no node found being focused"),
-                    load::<PackedScene>("uid://djadbqbt76p6g")
-                        .instantiate()
-                        .expect("no list_scene found to be loaded"),
-                    Color::LIGHT_STEEL_BLUE,
-                )
-            });
+        let mut pressed_signal = name_confirm_button.signals().pressed();
+        pressed_signal.connect_obj(&self.to_gd(), move |s: &mut Self| {
+            let current_focus_node = s
+                .to_gd()
+                .get_children()
+                .back()
+                .expect("no node found being focused");
+            let pet_list_node = load::<PackedScene>("uid://djadbqbt76p6g")
+                .instantiate()
+                .expect("no list_scene found to be loaded");
+            s.signals().change_scenes().emit(
+                current_focus_node,
+                pet_list_node,
+                Color::LIGHT_STEEL_BLUE,
+            );
+            s.signals()
+                .user_name_chosen()
+                .emit(name_line_edit.get_text())
+        });
 
         let current_focus_node: Gd<Node> = self
             .to_gd()
@@ -193,9 +204,22 @@ impl GameScreens {
         );
     }
 
+    #[signal]
+    fn user_name_chosen(new_name: GString);
+
+    fn _on_user_name_chosen(&mut self, new_name: GString) {
+        self.user = Some(User::new(new_name.to_string()));
+        if let Some(user) = &self.user {
+            godot_print!("I've been selected! {}", user.name);
+        } else {
+            godot_print!("no user sadge");
+        };
+    }
+
     /// Create a tween with a `TransitionType` and `EaseType` applied
-    /// NOTE: A transition_type of LINEAR will be the same animation no matter the ease type, just a
-    /// constant speed line.
+    ///
+    /// NOTE: A transition_type of LINEAR will be the same animation
+    /// no matter the ease type, just a constant speed line.
     ///
     /// # Panics
     ///
@@ -233,7 +257,7 @@ impl<T: Inherits<Node>> FindNodeable for Gd<T> {
     ///     .expect("issue finding %button");
     /// ```
     fn try_find_node<K: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<K>, String> {
-        match self.upcast_ref::<Node>().get_node_or_null(node_path) {
+        match self.upcast_ref().get_node_or_null(node_path) {
             Some(node_found) => match node_found.try_cast::<K>() {
                 Ok(correct_node) => Ok(correct_node),
                 Err(node_with_wrong_type) => Err(format!(

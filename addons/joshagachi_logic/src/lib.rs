@@ -1,6 +1,7 @@
 use godot::prelude::*;
 
 mod game_screens;
+mod user;
 
 struct MyExtension;
 
