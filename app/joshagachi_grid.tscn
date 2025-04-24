@@ -51,7 +51,8 @@ expand_mode = 5
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="joshagachi_list" type="GridContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -59,31 +60,31 @@ theme_override_constants/h_separation = 30
 theme_override_constants/v_separation = 15
 columns = 2
 
-[node name="joshagachi_icon" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
+[node name="joshagachi_icon" parent="MarginContainer/VBoxContainer/ScrollContainer/joshagachi_list" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("3_nnuxe")
 species_name = "Blob"
 species_color = Color(0.6, 0.898039, 0.313726, 1)
 
-[node name="joshagachi_icon2" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
+[node name="joshagachi_icon2" parent="MarginContainer/VBoxContainer/ScrollContainer/joshagachi_list" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("4_quvbi")
 species_name = "Ghost"
 species_color = Color(0.513233, 0.513233, 0.513233, 1)
 
-[node name="joshagachi_icon3" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
+[node name="joshagachi_icon3" parent="MarginContainer/VBoxContainer/ScrollContainer/joshagachi_list" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("5_prget")
 species_name = "Snake"
 species_color = Color(0.415686, 0.745098, 0.188235, 1)
 
-[node name="joshagachi_icon4" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
+[node name="joshagachi_icon4" parent="MarginContainer/VBoxContainer/ScrollContainer/joshagachi_list" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("6_e50lc")
 species_name = "Octopus"
 species_color = Color(0.247059, 0.247059, 0.454902, 1)
 
-[node name="joshagachi_icon5" parent="MarginContainer/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_sb87o")]
+[node name="joshagachi_icon5" parent="MarginContainer/VBoxContainer/ScrollContainer/joshagachi_list" instance=ExtResource("2_sb87o")]
 layout_mode = 2
 texture = ExtResource("7_fa0d1")
 species_name = "Pumpkin"

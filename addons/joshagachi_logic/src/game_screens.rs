@@ -1,3 +1,4 @@
+use crate::FindNodeable;
 use crate::user::User;
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
@@ -105,11 +106,11 @@ impl GameScreens {
         // WARN: during animation the scale/position might offset the spawned control blocker
         // leaving parts of a input intractable
         let mut mouse_block_control: Gd<Control> = Control::new_alloc();
-        current_focus_node.add_child(&mouse_block_control);
         mouse_block_control.set("offset_right", &viewport_dimensions.x.to_variant());
         mouse_block_control.set("offset_bottom", &viewport_dimensions.y.to_variant());
         mouse_block_control.set("global_position", &Vector2::ZERO.to_variant());
         mouse_block_control.set("mouse_force_pass_scroll_events", &false.to_variant());
+        current_focus_node.add_child(&mouse_block_control);
 
         godot_ref.add_child(&new_focus_node);
         new_focus_node.set("global_position", new_focus_node_start_position);
@@ -157,9 +158,6 @@ impl GameScreens {
         let name_line_edit: Gd<LineEdit> = name_select_screen.find_node("%name_line_edit");
 
         // TODO: better way of connecting scene transition graph
-        //let list_screen: Gd<Node> = load::<PackedScene>("uid://djadbqbt76p6g")
-        //    .instantiate()
-        //    .expect("no list_scene found to be loaded");
 
         let mut pressed_signal = name_confirm_button.signals().pressed();
         pressed_signal.connect_obj(&self.to_gd(), move |s: &mut Self| {
@@ -178,7 +176,7 @@ impl GameScreens {
             );
             s.signals()
                 .user_name_chosen()
-                .emit(name_line_edit.get_text())
+                .emit(name_line_edit.get_text());
         });
 
         let current_focus_node: Gd<Node> = self
@@ -209,11 +207,29 @@ impl GameScreens {
 
     fn _on_user_name_chosen(&mut self, new_name: GString) {
         self.user = Some(User::new(new_name.to_string()));
-        if let Some(user) = &self.user {
-            godot_print!("I've been selected! {}", user.name);
-        } else {
-            godot_print!("no user sadge");
-        };
+    }
+
+    #[func]
+    fn _on_pet_chosen(species_name: GString) {
+        godot_print!("{species_name}")
+        // TODO: Stuck :(
+        //
+        //let default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
+        //    .instantiate()
+        //    .expect("no default scene found to be loaded")
+        //    .cast::<Control>();
+        //let current_scene = default_scene
+        //    .get_tree()
+        //    .expect("not in tree")
+        //    .get_current_scene()
+        //    .expect("no current scene");
+        //default_scene.species = species_name;
+        //Self::on_pet_chosen(
+        //        .get_current_scene()
+        //        .expect("no current scene")
+        //        .cast::<GameScreens>(),
+        //    species_name,
+        //);
     }
 
     /// Create a tween with a `TransitionType` and `EaseType` applied
@@ -234,54 +250,5 @@ impl GameScreens {
             .expect("failed to set transition for tween")
             .set_ease(ease_type)
             .expect("failed to set ease for tween")
-    }
-}
-
-pub trait FindNodeable {
-    fn try_find_node<T: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<T>, String>;
-    fn find_node<K: Inherits<Node>>(&self, node_path: &str) -> Gd<K>;
-}
-
-impl<T: Inherits<Node>> FindNodeable for Gd<T> {
-    /// Access node at given node_path relative to node method is called under.
-    /// NOTE: can use unique names (%node_name)
-    ///
-    /// # Errors
-    ///
-    /// This function will return an error if the node path does not lead to an existing node,
-    /// or the node's type is invalid.
-    ///
-    /// # Example
-    /// ```
-    /// let button = some_parent_node.find_node_on::<BaseButton>("%button")
-    ///     .expect("issue finding %button");
-    /// ```
-    fn try_find_node<K: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<K>, String> {
-        match self.upcast_ref().get_node_or_null(node_path) {
-            Some(node_found) => match node_found.try_cast::<K>() {
-                Ok(correct_node) => Ok(correct_node),
-                Err(node_with_wrong_type) => Err(format!(
-                    "{node_path} is not a {}, found {node_with_wrong_type}",
-                    std::any::type_name::<K>()
-                )),
-            },
-            None => Err(format!("{node_path} not found in scene")),
-        }
-    }
-
-    /// Access node at given node_path relative to node method is called under.
-    /// NOTE: can use unique names (%node_name)
-    ///
-    /// # Panics
-    ///
-    /// Panics if the node path does not lead to an existing node, or the node's type is invalid.
-    ///
-    /// # Example
-    /// ```
-    /// let button = some_parent_node.find_node::<BaseButton>("%button")
-    /// ```
-    fn find_node<K: Inherits<Node>>(&self, node_path: &str) -> Gd<K> {
-        self.try_find_node(node_path)
-            .expect("issue finding {node_path}")
     }
 }
