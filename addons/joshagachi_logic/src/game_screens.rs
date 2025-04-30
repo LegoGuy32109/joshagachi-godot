@@ -1,5 +1,5 @@
 use crate::FindNodeable;
-use crate::user::User;
+use crate::user::{Joshagachi, User};
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
     BaseButton, ColorRect, Control, DisplayServer, IControl, LineEdit, Panel, ProjectSettings,
@@ -210,26 +210,29 @@ impl GameScreens {
     }
 
     #[func]
-    fn _on_pet_chosen(species_name: GString) {
-        godot_print!("{species_name}")
-        // TODO: Stuck :(
-        //
-        //let default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
-        //    .instantiate()
-        //    .expect("no default scene found to be loaded")
-        //    .cast::<Control>();
-        //let current_scene = default_scene
-        //    .get_tree()
-        //    .expect("not in tree")
-        //    .get_current_scene()
-        //    .expect("no current scene");
-        //default_scene.species = species_name;
-        //Self::on_pet_chosen(
-        //        .get_current_scene()
-        //        .expect("no current scene")
-        //        .cast::<GameScreens>(),
-        //    species_name,
-        //);
+    fn _on_pet_chosen(&mut self, species_name: GString, species_color: Color) {
+        let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
+            .instantiate()
+            .expect("no default scene found to be loaded");
+        default_scene.set("species", &species_name.to_variant());
+        if let Some(user) = &mut self.user {
+            let new_pet = Joshagachi::new(
+                format!("{}'s {species_name}", user.name),
+                species_name.to_string().as_str(),
+            );
+            default_scene.set("title", &new_pet.name.to_variant());
+            user.pets.push(new_pet);
+        } else {
+            godot_error!("No user exists for pet assignment.")
+        }
+        let current_scene = self
+            .to_gd()
+            .get_children()
+            .back()
+            .expect("no node currently focused");
+        self.signals()
+            .change_scenes()
+            .emit(current_scene, default_scene, species_color);
     }
 
     /// Create a tween with a `TransitionType` and `EaseType` applied

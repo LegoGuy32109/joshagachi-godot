@@ -1,6 +1,10 @@
+use std::str::FromStr;
+
+use godot::builtin::Color;
+
 pub struct User {
     pub name: String,
-    //pub pets: Vec<Joshagachi>,
+    pub pets: Vec<Joshagachi>,
     //pub purchased_items: Vec<Box<dyn Item>>,
 }
 
@@ -8,26 +12,71 @@ impl User {
     pub fn new(name: String) -> Self {
         Self {
             name,
-            //pets: Vec::new(),
+            pets: Vec::new(),
             //purchased_items: Vec::new(),
         }
     }
 }
 
-//struct Joshagachi {
-//    name: String,
-//    species: Species,
-//    food_level: f32,
-//    energy_level: f32,
-//}
-//
-//enum Species {
-//    Blob,
-//    Ghost,
-//    Octopus,
-//    Pumpkin,
-//    Snake,
-//}
+#[derive(Debug)]
+pub struct Joshagachi {
+    pub name: String,
+    pub species: Species,
+    pub food_level: f32,
+    pub energy_level: f32,
+}
+
+impl Joshagachi {
+    pub fn new(joshagachi_name: String, species: &str) -> Self {
+        Self {
+            name: joshagachi_name,
+            species: match species.parse::<Species>() {
+                Ok(species_type) => species_type,
+                Err(error_message) => panic!("{error_message}"),
+            },
+            food_level: 0.0,
+            energy_level: 0.0,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum Species {
+    Blob,
+    Ghost,
+    Octopus,
+    Pumpkin,
+    Snake,
+}
+
+impl FromStr for Species {
+    type Err = String;
+
+    fn from_str(string: &str) -> Result<Self, Self::Err> {
+        match string.to_lowercase().as_str() {
+            "blob" => Ok(Species::Blob),
+            "ghost" => Ok(Species::Ghost),
+            "octopus" => Ok(Species::Octopus),
+            "pumpkin" => Ok(Species::Pumpkin),
+            "snake" => Ok(Species::Snake),
+            &_ => Err("Unknown species found, recieved '{species}'".to_string()),
+        }
+    }
+}
+
+impl Species {
+    fn color(&self) -> Color {
+        match self {
+            Species::Blob => Color::from_html("#99e550").expect("invalid hexcode"),
+            Species::Ghost => Color::from_html("#838383").expect("invalid hexcode"),
+            Species::Octopus => Color::from_html("#3f3f74").expect("invalid hexcode"),
+            Species::Pumpkin => Color::from_html("#a8551c").expect("invalid hexcode"),
+            Species::Snake => Color::from_html("#6abe30").expect("invalid hexcode"),
+            // Dev species color
+            //_ => Color::from_html("#FA07CF").expect("invalid hexcode"),
+        }
+    }
+}
 //
 //trait Item {
 //    fn name(&self) -> &str;
