@@ -1,18 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4i5nrnfck28x"]
+[gd_scene load_steps=5 format=3 uid="uid://b4i5nrnfck28x"]
 
 [ext_resource type="SpriteFrames" uid="uid://bkleomjhay6wd" path="res://assets/sprite_frames/blob_frames.tres" id="1_3670i"]
 [ext_resource type="Script" uid="uid://7r0yp2qjl7jk" path="res://app/default_screen.gd" id="1_sggsy"]
 [ext_resource type="Script" uid="uid://bl7gqtk4cjwt7" path="res://app/button_scripts/redo_selection_button.gd" id="3_bo1l1"]
+[ext_resource type="Theme" uid="uid://bmjne16smejkf" path="res://app/default_button_theme.tres" id="4_hioqc"]
 
 [node name="default_screen" type="Control"]
 layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_sggsy")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
@@ -50,12 +51,56 @@ autoplay = "all"
 
 [node name="redo_selection_button" type="Button" parent="."]
 layout_mode = 0
-offset_left = -272.0
-offset_top = -425.0
-offset_right = 4.0
-offset_bottom = -340.0
+offset_left = 76.0
+offset_top = -410.0
+offset_right = 270.0
+offset_bottom = -308.0
 theme_override_font_sizes/font_size = 24
-text = "I want a different one!"
+text = "I want a
+different one!"
 script = ExtResource("3_bo1l1")
+
+[node name="HBoxContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -230.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="shop_button" type="Button" parent="HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+theme = ExtResource("4_hioqc")
+text = "Shop"
+
+[node name="shop_button" type="Button" parent="HBoxContainer/HBoxContainer2/shop_button"]
+custom_minimum_size = Vector2(200, 200)
+theme = ExtResource("4_hioqc")
+text = "Shop"
+
+[node name="play_button" type="Button" parent="HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+theme = ExtResource("4_hioqc")
+text = "Play
+"
+
+[node name="feed_button" type="Button" parent="HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+theme = ExtResource("4_hioqc")
+text = "Feed"
 
 [connection signal="pressed" from="redo_selection_button" to="redo_selection_button" method="_on_pressed"]
