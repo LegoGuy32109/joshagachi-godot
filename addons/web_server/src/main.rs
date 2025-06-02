@@ -3,6 +3,8 @@ use axum::middleware::{self, Next};
 use axum::{response::Response, Router};
 use tower_http::services::ServeDir;
 
+const ADDRESS: &str = "127.0.0.1:8061";
+
 async fn add_cors_headers(req: Request, next: Next) -> Result<Response, Response> {
     let mut response = next.run(req).await;
     let headers = response.headers_mut();
@@ -21,9 +23,7 @@ async fn main() {
         .nest_service("/", ServeDir::new("../../exports"))
         .layer(middleware::from_fn(add_cors_headers));
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8061")
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(ADDRESS).await.unwrap();
 
     println!(
         "\nlistening on [[ http://{} ]] <| Shift+Click Me!",

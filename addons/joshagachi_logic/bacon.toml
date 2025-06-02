@@ -14,7 +14,7 @@ command = ["RUST_BACKTRACE=1", "RUSTFLAGS=\"-C link-args=-pthread\"", "cargo", "
 need_stdout = true
 
 [jobs.export]
-command = ["$godot4", "--path", "../..", "--headless", "--export-debug", "Web" ]
+command = ["cmd", "/C", "bacon\\pre_export\\target\\release\\pre_export && %godot4% --path ../.. --headless --export-debug Web"]
 need_stdout = true
 watch = ["../../assets/", "../../app/"]
 

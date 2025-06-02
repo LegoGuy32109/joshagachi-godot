@@ -7,9 +7,11 @@
 
 [node name="default_screen" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -51,10 +53,10 @@ autoplay = "all"
 
 [node name="redo_selection_button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 76.0
-offset_top = -410.0
-offset_right = 270.0
-offset_bottom = -308.0
+offset_left = -241.0
+offset_top = -398.0
+offset_right = -47.0
+offset_bottom = -296.0
 theme_override_font_sizes/font_size = 24
 text = "I want a
 different one!"
@@ -66,7 +68,10 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -230.0
+offset_left = -360.0
+offset_top = 408.0
+offset_right = 360.0
+offset_bottom = 638.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_left = 30
@@ -82,11 +87,6 @@ metadata/_edit_use_anchors_ = true
 [node name="shop_button" type="Button" parent="HBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-theme = ExtResource("4_hioqc")
-text = "Shop"
-
-[node name="shop_button" type="Button" parent="HBoxContainer/HBoxContainer2/shop_button"]
-custom_minimum_size = Vector2(200, 200)
 theme = ExtResource("4_hioqc")
 text = "Shop"
 
