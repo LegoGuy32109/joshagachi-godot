@@ -1,10 +1,10 @@
 use crate::FindNodeable;
+use crate::debug_properties::DebugProperties;
 use crate::user::{Joshagachi, User};
-use godot::classes::file_access::ModeFlags;
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
-    BaseButton, ColorRect, Control, DisplayServer, FileAccess, IControl, Json, LineEdit, Panel,
-    ProjectSettings, Tween,
+    BaseButton, ColorRect, Control, DisplayServer, IControl, LineEdit, Panel, ProjectSettings,
+    Tween,
 };
 use godot::obj::WithUserSignals;
 use godot::prelude::*;
@@ -21,24 +21,6 @@ pub struct GameScreens {
 #[godot_api]
 impl IControl for GameScreens {
     fn init(base: Base<Control>) -> Self {
-        // display build info
-        let file = FileAccess::open("res://build_info.json", ModeFlags::READ);
-        if let Some(file) = file {
-            let content = file.get_as_text();
-            let result = Json::parse_string(&content);
-            if let Ok(dictionary) = result.try_to::<Dictionary>() {
-                godot_print!(
-                    "⛏️ {} ⚒️ ({})",
-                    dictionary.get_or_nil("build_dwarf_name"),
-                    dictionary.get_or_nil("build_time_nice")
-                );
-            } else {
-                godot_error!("Failed to read build_info.json")
-            }
-        } else {
-            godot_error!("Failed to open build_info.json")
-        }
-
         let project_settings = ProjectSettings::singleton();
         let display_server = DisplayServer::singleton();
         Self {
@@ -58,15 +40,16 @@ impl IControl for GameScreens {
     }
 
     fn ready(&mut self) {
-        let game_screens = self.to_gd();
-
         // Determine the actual screen size compared to project settings
         godot_print!("Desired Resolution: {}", self.viewport_dimensions);
         godot_print!("Actual Resolution: {}", self.screen_dimensions);
 
         // Find nodes in scene tree
-        let mut landing_screen = game_screens.find_node::<Control>("%landing_screen");
+        let game_screens = self.to_gd();
+        // display build info
+        DebugProperties::display_and_print(&game_screens);
 
+        let mut landing_screen = game_screens.find_node::<Control>("%landing_screen");
         let mut start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
 
         // Attach signals
