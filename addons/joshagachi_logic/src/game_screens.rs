@@ -50,13 +50,13 @@ impl IControl for GameScreens {
         DebugProperties::display_and_print(&game_screens);
 
         let mut landing_screen = game_screens.find_node::<Control>("%landing_screen");
-        let mut start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
+        let start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
 
         // Attach signals
         start_game_button
             .signals()
             .pressed()
-            .connect_obj(&self.to_gd(), GameScreens::_on_start_game_button_pressed);
+            .connect_other(&self.to_gd(), GameScreens::_on_start_game_button_pressed);
         self.signals()
             .change_scenes()
             .connect_self(Self::_on_change_scenes);
@@ -155,14 +155,14 @@ impl GameScreens {
             .instantiate()
             .expect("no name_select_screen found to be loaded");
 
-        let mut name_confirm_button: Gd<BaseButton> =
+        let name_confirm_button: Gd<BaseButton> =
             name_select_screen.find_node("%name_confirm_button");
         let name_line_edit: Gd<LineEdit> = name_select_screen.find_node("%name_line_edit");
 
         // TODO: better way of connecting scene transition graph
 
-        let mut pressed_signal = name_confirm_button.signals().pressed();
-        pressed_signal.connect_obj(&self.to_gd(), move |s: &mut Self| {
+        let pressed_signal = name_confirm_button.signals().pressed();
+        pressed_signal.connect_other(&self.to_gd(), move |s: &mut Self| {
             let current_focus_node = s
                 .to_gd()
                 .get_children()
@@ -172,13 +172,13 @@ impl GameScreens {
                 .instantiate()
                 .expect("no list_scene found to be loaded");
             s.signals().change_scenes().emit(
-                current_focus_node,
-                pet_list_node,
+                &current_focus_node,
+                &pet_list_node,
                 Color::LIGHT_STEEL_BLUE,
             );
             s.signals()
                 .user_name_chosen()
-                .emit(name_line_edit.get_text());
+                .emit(&name_line_edit.get_text());
         });
 
         let current_focus_node: Gd<Node> = self
@@ -188,8 +188,8 @@ impl GameScreens {
             .expect("no node found being focused");
 
         self.signals().change_scenes().emit(
-            current_focus_node,
-            name_select_screen,
+            &current_focus_node,
+            &name_select_screen,
             Color::PALE_GREEN,
         );
     }
@@ -234,7 +234,7 @@ impl GameScreens {
             .expect("no node currently focused");
         self.signals()
             .change_scenes()
-            .emit(current_scene, default_scene, species_color);
+            .emit(&current_scene, &default_scene, species_color);
     }
 
     /// Create a tween with a `TransitionType` and `EaseType` applied

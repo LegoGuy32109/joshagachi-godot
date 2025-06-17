@@ -9,7 +9,7 @@ fn main() {
 
     let now = chrono::Local::now();
     let build_time = now.format("%Y-%m-%d %H:%M:%S").to_string();
-    let build_time_nice = now.format("%b%e %-I:%M:%S %P").to_string();
+    let build_time_nice = now.format("%b %-e %-I:%M:%S %P").to_string();
     let build_time_epoch = now.timestamp();
     let build_info_filename = "build_info.json";
     let build_info_path = format!("../../{build_info_filename}");
