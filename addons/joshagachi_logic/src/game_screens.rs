@@ -23,17 +23,13 @@ impl IControl for GameScreens {
     fn init(base: Base<Control>) -> Self {
         let project_settings = ProjectSettings::singleton();
         let display_server = DisplayServer::singleton();
+        let viewport_width = project_settings.get_setting("display/window/size/viewport_width");
+        let viewport_height = project_settings.get_setting("display/window/size/viewport_height");
+        let viewport_dimensions =
+            Vector2i::new(viewport_width.to(), viewport_height.to()).cast_float();
         Self {
             screen_dimensions: display_server.screen_get_size().cast_float(),
-            viewport_dimensions: Vector2i::new(
-                project_settings
-                    .get_setting("display/window/size/viewport_width")
-                    .to(),
-                project_settings
-                    .get_setting("display/window/size/viewport_height")
-                    .to(),
-            )
-            .cast_float(),
+            viewport_dimensions,
             user: None,
             base,
         }
@@ -74,23 +70,10 @@ impl IControl for GameScreens {
 #[godot_api]
 impl GameScreens {
     #[signal]
-    fn change_scenes(
-        current_focus_node: Gd<Node>,
-        new_focus_node: Gd<Node>,
-        new_background_color: Color,
-    );
+    fn change_scenes(new_focus_node: Gd<Node>, new_background_color: Color);
 
-    fn _on_change_scenes(
-        &mut self,
-        mut current_focus_node: Gd<Node>,
-        mut new_focus_node: Gd<Node>,
-        new_background_color: Color,
-    ) {
-        let Self {
-            viewport_dimensions,
-            ..
-        } = *self;
-        let mut godot_ref = self.to_gd();
+    fn _on_change_scenes(&mut self, mut new_focus_node: Gd<Node>, new_background_color: Color) {
+        let godot_ref = self.to_gd();
         // in seconds
         let duration = 1.0;
 
@@ -104,17 +87,32 @@ impl GameScreens {
             .find_node::<Panel>("%screen_off_left")
             .get("global_position");
 
-        // disable interaction while moving current focus node away
-        // WARN: during animation the scale/position might offset the spawned control blocker
-        // leaving parts of a input intractable
-        let mut mouse_block_control: Gd<Control> = Control::new_alloc();
-        mouse_block_control.set("offset_right", &viewport_dimensions.x.to_variant());
-        mouse_block_control.set("offset_bottom", &viewport_dimensions.y.to_variant());
-        mouse_block_control.set("global_position", &Vector2::ZERO.to_variant());
-        mouse_block_control.set("mouse_force_pass_scroll_events", &false.to_variant());
-        current_focus_node.add_child(&mouse_block_control);
+        // we expect one node in the control container
+        let mut focused_screen_container =
+            match godot_ref.try_find_node::<Control>("%focused_screen_container") {
+                Ok(result) => result,
+                Err(error) => {
+                    godot_print!("{error}");
+                    return;
+                }
+            };
+        let children_in_container = focused_screen_container.get_children();
+        let potential_current_focus_node = children_in_container.get(0);
+        // transition is in progress, don't trigger
+        if children_in_container.len() > 1 {
+            godot_print!(
+                "Too many children focused, found {}",
+                children_in_container.len()
+            );
+            return;
+        }
+        let Some(current_focus_node) = potential_current_focus_node else {
+            godot_print!("A scene is not being focused!!");
+            return;
+        };
 
-        godot_ref.add_child(&new_focus_node);
+        // add the new node to the focused container, off screen in start position
+        focused_screen_container.add_child(&new_focus_node);
         new_focus_node.set("global_position", new_focus_node_start_position);
 
         self.change_background(new_background_color, duration);
@@ -144,7 +142,7 @@ impl GameScreens {
             "queue_free",
         ));
 
-        // snap new node into center if screen changed during animation
+        // snap new node into center if screen dimensions changed during animation
         transition_anim_tween.signals().finished().connect(move || {
             new_focus_node.set("global_position", &screen_center.get("global_position"))
         });
@@ -162,36 +160,23 @@ impl GameScreens {
         // TODO: better way of connecting scene transition graph
 
         let pressed_signal = name_confirm_button.signals().pressed();
-        pressed_signal.connect_other(&self.to_gd(), move |s: &mut Self| {
-            let current_focus_node = s
-                .to_gd()
-                .get_children()
-                .back()
-                .expect("no node found being focused");
+        pressed_signal.connect_other(&self.to_gd(), move |game_screens: &mut Self| {
             let pet_list_node = load::<PackedScene>("uid://djadbqbt76p6g")
                 .instantiate()
                 .expect("no list_scene found to be loaded");
-            s.signals().change_scenes().emit(
-                &current_focus_node,
-                &pet_list_node,
-                Color::LIGHT_STEEL_BLUE,
-            );
-            s.signals()
+            game_screens
+                .signals()
+                .change_scenes()
+                .emit(&pet_list_node, Color::LIGHT_STEEL_BLUE);
+            game_screens
+                .signals()
                 .user_name_chosen()
                 .emit(&name_line_edit.get_text());
         });
 
-        let current_focus_node: Gd<Node> = self
-            .to_gd()
-            .get_children()
-            .back()
-            .expect("no node found being focused");
-
-        self.signals().change_scenes().emit(
-            &current_focus_node,
-            &name_select_screen,
-            Color::PALE_GREEN,
-        );
+        self.signals()
+            .change_scenes()
+            .emit(&name_select_screen, Color::PALE_GREEN);
     }
 
     fn change_background(&self, color: Color, duration: f64) {
@@ -227,14 +212,9 @@ impl GameScreens {
         } else {
             godot_error!("No user exists for pet assignment.")
         }
-        let current_scene = self
-            .to_gd()
-            .get_children()
-            .back()
-            .expect("no node currently focused");
         self.signals()
             .change_scenes()
-            .emit(&current_scene, &default_scene, species_color);
+            .emit(&default_scene, species_color);
     }
 
     /// Create a tween with a `TransitionType` and `EaseType` applied

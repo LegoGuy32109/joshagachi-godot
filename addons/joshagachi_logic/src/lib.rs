@@ -25,7 +25,7 @@ impl<T: Inherits<Node>> FindNodeable for Gd<T> {
     ///
     /// # Example
     /// ```
-    /// let button = some_parent_node.find_node_on::<BaseButton>("%button")
+    /// let button = some_parent_node.try_find_node::<BaseButton>("%button")
     ///     .expect("issue finding %button");
     /// ```
     fn try_find_node<K: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<K>, String> {
