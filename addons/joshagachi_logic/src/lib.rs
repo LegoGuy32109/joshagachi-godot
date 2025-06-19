@@ -9,6 +9,8 @@ struct MyExtension;
 #[gdextension]
 unsafe impl ExtensionLibrary for MyExtension {}
 
+// INFO: Helper traits
+
 pub trait FindNodeable {
     fn try_find_node<T: Inherits<Node>>(&self, node_path: &str) -> Result<Gd<T>, String>;
     fn find_node<K: Inherits<Node>>(&self, node_path: &str) -> Gd<K>;

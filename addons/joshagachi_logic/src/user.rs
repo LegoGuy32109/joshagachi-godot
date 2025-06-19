@@ -64,6 +64,19 @@ impl FromStr for Species {
     }
 }
 
+impl ToString for Species {
+    fn to_string(&self) -> String {
+        match self {
+            Species::Blob => "blob",
+            Species::Ghost => "ghost",
+            Species::Octopus => "octopus",
+            Species::Pumpkin => "pumpkin",
+            Species::Snake => "snake",
+        }
+        .to_string()
+    }
+}
+
 impl Species {
     fn color(&self) -> Color {
         match self {

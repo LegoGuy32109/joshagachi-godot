@@ -1,10 +1,11 @@
 use crate::FindNodeable;
 use crate::debug_properties::DebugProperties;
 use crate::user::{Joshagachi, User};
+use godot::classes::file_access::ModeFlags;
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
-    BaseButton, ColorRect, Control, DisplayServer, IControl, LineEdit, Panel, ProjectSettings,
-    Tween,
+    BaseButton, ColorRect, Control, DisplayServer, IControl, Json, LineEdit, Panel,
+    ProjectSettings, Tween,
 };
 use godot::obj::WithUserSignals;
 use godot::prelude::*;
@@ -42,11 +43,35 @@ impl IControl for GameScreens {
 
         // Find nodes in scene tree
         let game_screens = self.to_gd();
-        // display build info
+        // Display build info in game and in console
         DebugProperties::display_and_print(&game_screens);
 
         let mut landing_screen = game_screens.find_node::<Control>("%landing_screen");
         let start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
+        String::from("").contains(godot::global::Error::ERR_FILE_NOT_FOUND.as_str());
+
+        // Determine game state
+        match GFile::open("user://player.save", ModeFlags::READ) {
+            Ok(mut save_file) => {
+                let content = save_file
+                    .read_as_gstring_entire(true)
+                    .expect("Failed to read file to GString");
+                let _dictionary: Dictionary = Json::parse_string(&content)
+                    .try_to()
+                    .expect("Failed to convert file to dictionary");
+                godot_print!("{content}");
+            }
+            Err(error) => {
+                if error
+                    .to_string()
+                    .contains(godot::global::Error::ERR_FILE_NOT_FOUND.as_str())
+                {
+                    godot_print!("No save file present")
+                } else {
+                    godot_error!("Issue opening save file: {error:?}")
+                }
+            }
+        }
 
         // Attach signals
         start_game_button
@@ -202,19 +227,36 @@ impl GameScreens {
             .instantiate()
             .expect("no default scene found to be loaded");
         default_scene.set("species", &species_name.to_variant());
-        if let Some(user) = &mut self.user {
-            let new_pet = Joshagachi::new(
-                format!("{}'s {species_name}", user.name),
-                species_name.to_string().as_str(),
-            );
-            default_scene.set("title", &new_pet.name.to_variant());
-            user.pets.push(new_pet);
-        } else {
-            godot_error!("No user exists for pet assignment.")
-        }
+
+        let Some(user) = &mut self.user else {
+            godot_error!("No user exists for pet assignment.");
+            return;
+        };
+        let user_name = user.name.clone();
+        let new_pet_name = format!("{user_name}'s {species_name}");
+        let new_pet = Joshagachi::new(new_pet_name.clone(), species_name.to_string().as_str());
+        default_scene.set("title", &new_pet.name.to_variant());
+        user.pets.push(new_pet);
+
+        // the scene is setup with the pet and user name
         self.signals()
             .change_scenes()
             .emit(&default_scene, species_color);
+
+        // save game state
+        let mut save_file =
+            GFile::open("user://player.save", ModeFlags::WRITE).expect("Failed to open save file");
+        let game_data = dict! {
+           "player_name": user_name,
+           "pet_name": new_pet_name,
+           "species": species_name,
+        };
+        let game_data_variant = Json::stringify(&game_data.to_variant());
+        save_file
+            .write_gstring_line(&game_data_variant)
+            .expect("Failed to write to save file");
+
+        godot_print!("Saved to file: {game_data_variant}");
     }
 
     /// Create a tween with a `TransitionType` and `EaseType` applied
