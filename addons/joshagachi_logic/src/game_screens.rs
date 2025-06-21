@@ -50,6 +50,7 @@ impl IControl for GameScreens {
         let start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
 
         // Determine game state
+        let mut num_pets = 0;
         if let Ok(save_data) = SaveGame::open() {
             console_log!("{save_data}");
             let player_data = save_data
@@ -59,8 +60,8 @@ impl IControl for GameScreens {
                 .expect("Cound't convert player property to dictionary");
             match User::from_dictionary(player_data) {
                 Ok(user) => {
-                    godot_print!("{}", user.to_string());
-                    godot_print!("{}", user.pets.len());
+                    num_pets = user.pets.len();
+                    godot_print!("{num_pets} pets found saved");
                 }
                 Err(message) => godot_error!("{message}"),
             }
