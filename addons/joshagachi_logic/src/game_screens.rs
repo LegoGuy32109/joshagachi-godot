@@ -48,11 +48,22 @@ impl IControl for GameScreens {
 
         let mut landing_screen = game_screens.find_node::<Control>("%landing_screen");
         let start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
-        String::from("").contains(godot::global::Error::ERR_FILE_NOT_FOUND.as_str());
 
         // Determine game state
-        if let Ok(dictionary) = SaveGame::open() {
-            console_log!("{dictionary}, '{landing_screen}', '{game_screens}'");
+        if let Ok(save_data) = SaveGame::open() {
+            console_log!("{save_data}");
+            let player_data = save_data
+                .get("player")
+                .expect("No player property in save data")
+                .try_to()
+                .expect("Cound't convert player property to dictionary");
+            match User::from_dictionary(player_data) {
+                Ok(user) => {
+                    godot_print!("{}", user.to_string());
+                    godot_print!("{}", user.pets.len());
+                }
+                Err(message) => godot_error!("{message}"),
+            }
         };
 
         // Attach signals
@@ -214,7 +225,7 @@ impl GameScreens {
             godot_error!("No user exists for pet assignment.");
             return;
         };
-        user.add_pet(species_name.to_string());
+        user.add_new_pet(species_name.to_string());
         let Some(pet) = user.pets.last() else {
             godot_error!("Failed to create pet.");
             return;

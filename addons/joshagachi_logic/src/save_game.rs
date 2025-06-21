@@ -37,7 +37,7 @@ impl SaveGame {
     pub fn save(user: &User) -> Result<Dictionary, Box<dyn StdError>> {
         let mut save_file = GFile::open(SAVE_FILE_NAME, ModeFlags::WRITE)?;
         let game_data = dict! {
-           "player": user.to_string(),
+           "player": user.to_dictionary(),
         };
         let game_data_variant = Json::stringify(&game_data.to_variant());
         save_file.write_gstring_line(&game_data_variant)?;
