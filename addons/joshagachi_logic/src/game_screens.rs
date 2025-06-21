@@ -1,11 +1,11 @@
-use crate::FindNodeable;
 use crate::debug_properties::DebugProperties;
 use crate::save_game::SaveGame;
 use crate::user::User;
+use crate::{FindNodeable, console_log};
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
-    BaseButton, ColorRect, Control, DisplayServer, Engine, IControl, LineEdit, Panel,
-    ProjectSettings, Tween,
+    BaseButton, ColorRect, Control, DisplayServer, IControl, LineEdit, Panel, ProjectSettings,
+    Tween,
 };
 use godot::obj::WithUserSignals;
 use godot::prelude::*;
@@ -52,14 +52,7 @@ impl IControl for GameScreens {
 
         // Determine game state
         if let Ok(dictionary) = SaveGame::open() {
-            // just plain string :(
-            godot_print!("{dictionary}");
-
-            // directly using JS to get intractable object :)
-            let mut js_bridge = Engine::singleton()
-                .get_singleton("JavaScriptBridge")
-                .expect("No JSBridge???!!");
-            js_bridge.call("eval", &[format!("console.log({dictionary})").to_variant()]);
+            console_log!("{dictionary}, '{landing_screen}', '{game_screens}'");
         };
 
         // Attach signals

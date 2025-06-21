@@ -1,9 +1,11 @@
+use godot::classes::Engine;
 use godot::prelude::*;
+use std::fmt::Display;
 
 mod debug_properties;
 mod game_screens;
-mod user;
 mod save_game;
+mod user;
 
 struct MyExtension;
 
@@ -59,4 +61,32 @@ impl<T: Inherits<Node>> FindNodeable for Gd<T> {
         self.try_find_node(node_path)
             .expect("issue finding {node_path}")
     }
+}
+
+/// Attempt to print a message to the JavaScript console
+/// WARN: Uses .eval() function on JavaScriptBridge
+///
+/// # Errors
+/// If unable to retrieve JavaScriptBridge singleton
+pub fn console_log<T: Display>(variable: T) -> Result<(), String> {
+    let mut js_bridge = Engine::singleton()
+        .get_singleton("JavaScriptBridge")
+        .ok_or("Failed to retrieve JavaScriptBridge singleton")?;
+    js_bridge.call("eval", &[format!("console.log({variable})").to_variant()]);
+    Ok(())
+}
+
+/// Print a message to the JavaScript console
+/// WARN: Uses .eval() function on JavaScriptBridge
+///
+/// # Example
+/// ```
+/// console_log!("{dictionary}, '{string_variable}'")
+/// ```
+#[macro_export]
+macro_rules! console_log {
+    ($($arg:tt)*) => {
+        let string_to_console = format!($($arg)*);
+        let _ = $crate::console_log(string_to_console);
+    };
 }
