@@ -1,6 +1,6 @@
 use crate::debug_properties::DebugProperties;
 use crate::save_game::SaveGame;
-use crate::user::User;
+use crate::user::{Species, User};
 use crate::{FindNodeable, console_log};
 use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
@@ -50,7 +50,6 @@ impl IControl for GameScreens {
         let start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
 
         // Determine game state
-        let mut num_pets = 0;
         if let Ok(save_data) = SaveGame::open() {
             console_log!("{save_data}");
             let player_data = save_data
@@ -59,10 +58,7 @@ impl IControl for GameScreens {
                 .try_to()
                 .expect("Cound't convert player property to dictionary");
             match User::from_dictionary(player_data) {
-                Ok(user) => {
-                    num_pets = user.pets.len();
-                    godot_print!("{num_pets} pets found saved");
-                }
+                Ok(user) => self.user = Some(user),
                 Err(message) => godot_error!("{message}"),
             }
         };
@@ -168,6 +164,31 @@ impl GameScreens {
     }
 
     fn _on_start_game_button_pressed(&mut self) {
+        // if a user was loaded from save data, move straight to pet screen
+        'check_user_exists: {
+            if let Some(ref user) = self.user {
+                let Some(first_pet) = user.pets.get(0) else {
+                    // TODO: skip name setting and go to joshagachi list
+                    break 'check_user_exists;
+                };
+                // TODO: better way of loading scenes from uids
+                let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
+                    .instantiate()
+                    .expect("no default scene found to be loaded");
+                let species: &Species = &first_pet.species;
+                let species_color = species.color();
+                default_scene.set("species", &species.to_string().to_variant());
+                default_scene.set("title", &first_pet.name.to_variant());
+
+                self.signals()
+                    .change_scenes()
+                    .emit(&default_scene, species_color);
+
+                return;
+            }
+        }
+
+        // setup screens to get user information and make pet decision
         let name_select_screen: Gd<Node> = load::<PackedScene>("uid://f6rye7ohvsw8")
             .instantiate()
             .expect("no name_select_screen found to be loaded");

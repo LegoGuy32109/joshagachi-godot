@@ -170,7 +170,7 @@ impl ToString for Species {
 }
 
 impl Species {
-    fn color(&self) -> Color {
+    pub fn color(&self) -> Color {
         match self {
             Species::Blob => Color::from_html("#99e550").expect("invalid hexcode"),
             Species::Ghost => Color::from_html("#838383").expect("invalid hexcode"),
