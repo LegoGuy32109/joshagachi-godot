@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 use godot::builtin::Color;
+use godot::classes::Json;
+use godot::prelude::*;
 use std::str::FromStr;
 
 pub struct User {
@@ -16,9 +18,32 @@ impl User {
             purchased_items: Vec::new(),
         }
     }
+
+    pub fn add_pet(&mut self, species_name: String) {
+        self.pets.push(Joshagachi::new(
+            format!("{}'s {species_name}", self.name),
+            species_name.as_str(),
+        ))
+    }
 }
 
-#[derive(Debug)]
+impl ToString for User {
+    fn to_string(&self) -> String {
+        let player_data = dict! {
+            "name": self.name.clone(),
+            "pets": self.pets.iter().map(|pet|
+                dict! {
+                    "name": pet.name.clone(),
+                    "species": pet.species.to_string(),
+                    "food_level": pet.food_level,
+                    "energy_level": pet.energy_level,
+                }
+            ).collect::<Vec<Dictionary>>(),
+        };
+        Json::stringify(&player_data.to_variant()).to_string()
+    }
+}
+
 pub struct Joshagachi {
     pub name: String,
     pub species: Species,
