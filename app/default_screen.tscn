@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b4i5nrnfck28x"]
+[gd_scene load_steps=6 format=3 uid="uid://b4i5nrnfck28x"]
 
 [ext_resource type="SpriteFrames" uid="uid://bkleomjhay6wd" path="res://assets/sprite_frames/blob_frames.tres" id="1_3670i"]
 [ext_resource type="Script" uid="uid://7r0yp2qjl7jk" path="res://app/default_screen.gd" id="1_sggsy"]
+[ext_resource type="Script" uid="uid://bqxoi1ncgba4j" path="res://app/button_scripts/pet_label_button.gd" id="2_hrpe2"]
 [ext_resource type="Script" uid="uid://bl7gqtk4cjwt7" path="res://app/button_scripts/redo_selection_button.gd" id="3_bo1l1"]
 [ext_resource type="Theme" uid="uid://bmjne16smejkf" path="res://app/default_button_theme.tres" id="4_hioqc"]
 
@@ -37,6 +38,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Your Joshagachi"
+script = ExtResource("2_hrpe2")
 
 [node name="Control" type="ColorRect" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(300, 300)
@@ -103,4 +105,5 @@ layout_mode = 2
 theme = ExtResource("4_hioqc")
 text = "Feed"
 
+[connection signal="gui_input" from="CenterContainer/VBoxContainer/pet_label" to="CenterContainer/VBoxContainer/pet_label" method="_on_gui_input"]
 [connection signal="pressed" from="redo_selection_button" to="redo_selection_button" method="_on_pressed"]
