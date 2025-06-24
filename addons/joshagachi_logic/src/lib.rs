@@ -4,7 +4,7 @@ use std::fmt::Display;
 
 mod debug_properties;
 mod game_screens;
-mod save_game;
+mod save_data;
 mod user;
 
 struct MyExtension;

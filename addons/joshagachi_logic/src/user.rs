@@ -39,8 +39,8 @@ impl User {
                     "species": pet.species.to_string(),
                     "food_level": pet.food_level,
                     "energy_level": pet.energy_level,
-                }
-            ).collect::<Vec<Dictionary>>(),
+                }.to_variant()
+            ).collect::<Vec<Variant>>(),
         }
     }
 
@@ -53,7 +53,7 @@ impl User {
                 .map_err(|_| "Failed to convert User's name property to string")?,
         );
         if let Some(pets_array) = dictionary.get("pets") {
-            let pets_array: VariantArray = pets_array.try_to().map_err(|err| {
+            let pets_array: Array<Variant> = pets_array.try_to().map_err(|err| {
                 format!(
                     "Failed to convert pets property to array: {}",
                     err.to_string()
@@ -92,6 +92,11 @@ impl User {
             }
         };
         Ok(user)
+    }
+
+    pub fn clone(&self) -> User {
+        User::from_dictionary(self.to_dictionary())
+            .expect("Issue converting User to dictionary and back")
     }
 }
 

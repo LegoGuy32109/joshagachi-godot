@@ -1,5 +1,5 @@
 use crate::debug_properties::DebugProperties;
-use crate::save_game::SaveGame;
+use crate::save_data::SaveData;
 use crate::user::{Species, User};
 use crate::{FindNodeable, console_log};
 use godot::classes::tween::{EaseType, TransitionType};
@@ -50,18 +50,13 @@ impl IControl for GameScreens {
         let start_game_button = landing_screen.find_node::<BaseButton>("%start_game_button");
 
         // Determine game state
-        if let Ok(save_data) = SaveGame::open() {
-            console_log!("{save_data}");
-            let player_data = save_data
-                .get("player")
-                .expect("No player property in save data")
-                .try_to()
-                .expect("Cound't convert player property to dictionary");
-            match User::from_dictionary(player_data) {
-                Ok(user) => self.user = Some(user),
-                Err(message) => godot_error!("{message}"),
+        if let Ok(save_game) = SaveData::open() {
+            console_log!("{}", save_game.to_dictionary());
+            match save_game.user {
+                Some(user) => self.user = Some(user),
+                None => godot_error!("No player property in save data"),
             }
-        };
+        }
 
         // Attach signals
         start_game_button
@@ -255,9 +250,10 @@ impl GameScreens {
         default_scene.set("title", &pet.name.to_variant());
 
         // save game state
-        match SaveGame::save(user) {
+        match SaveData::save_user(user) {
             Ok(dictionary) => {
-                godot_print!("Successfully saved game {dictionary}");
+                godot_print!("Successfully saved game");
+                console_log!("{dictionary}");
                 // transition to new screen
                 self.signals()
                     .change_scenes()
