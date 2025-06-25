@@ -1,4 +1,4 @@
-extends Label
+extends Button
 const MAX_NAME_LENGTH: int = 17
 
 func _on_gui_input(event: InputEvent) -> void:
