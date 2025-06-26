@@ -9,6 +9,7 @@ use godot::classes::{
 };
 use godot::obj::WithUserSignals;
 use godot::prelude::*;
+use std::str::FromStr;
 
 #[derive(GodotClass)]
 #[class(base=Control)]
@@ -158,30 +159,57 @@ impl GameScreens {
         });
     }
 
-    fn _on_start_game_button_pressed(&mut self) {
-        // if a user was loaded from save data, move straight to pet screen
-        'check_user_exists: {
-            if let Some(ref user) = self.user {
-                let Some(first_pet) = user.pets.get(0) else {
-                    // TODO: skip name setting and go to joshagachi list
-                    break 'check_user_exists;
-                };
-                // TODO: better way of loading scenes from uids
-                let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
-                    .instantiate()
-                    .expect("no default scene found to be loaded");
-                let species: &Species = &first_pet.species;
-                let species_color = species.color();
-                default_scene.set("species", &species.to_string().to_variant());
-                default_scene.set("title", &first_pet.name.to_variant());
+    #[func]
+    fn on_pet_name_set(&mut self, new_name: GString) {
+        let user = self
+            .user
+            .as_mut()
+            .expect("user does not exist when setting new pet name");
+        let current_pet_index = user
+            .current_pet_index
+            .expect("user does not have a current pet when setting new pet name");
+        let pets_len = user.pets.len();
+        let pet = user.pets.get_mut(current_pet_index).expect(
+            format!(
+                "Index '{current_pet_index}' was out of range for user pets length ({pets_len})"
+            )
+            .as_str(),
+        );
+        pet.set_name(new_name.to_string());
 
-                self.signals()
-                    .change_scenes()
-                    .emit(&default_scene, species_color);
-
-                return;
+        match SaveData::save_user(user) {
+            Ok(dictionary) => {
+                godot_print!("Successfully saved game");
+                console_log!("{dictionary}");
             }
+            Err(error) => godot_error!("{error}"),
         }
+    }
+
+    fn _on_start_game_button_pressed(&mut self) {
+        // if a user was already loaded from save data, move straight to pet screen
+        // TODO: better way of getting and setting selected_pet
+        if let Some(first_pet) = self.user.as_mut().and_then(|user| user.pets.get(0)) {
+            // TODO: better way of loading scenes from uids
+            let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
+                .instantiate()
+                .expect("no default scene found to be loaded");
+
+            let species: &Species = &first_pet.species;
+            let species_color = species.color();
+            default_scene.set("species", &species.to_string().to_variant());
+            default_scene.set("title", &first_pet.name.to_variant());
+
+            // use methods on self after first_pet is finished being used
+            self.user
+                .as_mut()
+                .expect("couldn't access user even though just got first pet")
+                .set_current_pet_index(0);
+            self.signals()
+                .change_scenes()
+                .emit(&default_scene, species_color);
+            return;
+        };
 
         // setup screens to get user information and make pet decision
         let name_select_screen: Gd<Node> = load::<PackedScene>("uid://f6rye7ohvsw8")
@@ -232,17 +260,21 @@ impl GameScreens {
     }
 
     #[func]
-    fn _on_pet_chosen(&mut self, species_name: GString, species_color: Color) {
+    fn on_pet_chosen(&mut self, species_name: GString) {
         let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
             .instantiate()
             .expect("no default scene found to be loaded");
+        let species_name_string = species_name.to_string();
+        let species = Species::from_str(&species_name_string).expect("couldn't determine species");
+
+        // indicate to scene what kind of species being viewed
         default_scene.set("species", &species_name.to_variant());
 
         let Some(ref mut user) = self.user else {
             godot_error!("No user exists for pet assignment.");
             return;
         };
-        user.add_new_pet(species_name.to_string());
+        user.add_new_pet(species_name_string);
         let Some(pet) = user.pets.last() else {
             godot_error!("Failed to create pet.");
             return;
@@ -257,7 +289,7 @@ impl GameScreens {
                 // transition to new screen
                 self.signals()
                     .change_scenes()
-                    .emit(&default_scene, species_color);
+                    .emit(&default_scene, species.color());
             }
             Err(error) => godot_error!("{error}"),
         }

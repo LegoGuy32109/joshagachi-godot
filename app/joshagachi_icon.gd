@@ -24,9 +24,6 @@ func _ready():
 	%select_button.connect("pressed", _on_select_button_pressed)
 	game_screens = get_tree().current_scene
 
-# Emit signal to parent screens scene to handle transition with new Node
+# Tell game screens scene to handle transition with new Node
 func _on_select_button_pressed():
-	get_tree().current_scene._on_pet_chosen(species_name, species_color)
-	# var default_scene = load("uid://b4i5nrnfck28x").instantiate()
-	# default_scene.species = species_name
-	# game_screens.change_scenes.emit(self.get_parent().get_parent().get_parent().get_parent().get_parent(), default_scene, species_color)
+	get_tree().current_scene.on_pet_chosen(species_name)

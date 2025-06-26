@@ -6,6 +6,7 @@ use std::str::FromStr;
 
 pub struct User {
     pub name: String,
+    pub current_pet_index: Option<usize>,
     pub pets: Vec<Joshagachi>,
     pub purchased_items: Vec<Box<dyn Item>>,
 }
@@ -14,16 +15,22 @@ impl User {
     pub fn new(name: String) -> Self {
         Self {
             name,
+            current_pet_index: None,
             pets: Vec::new(),
             purchased_items: Vec::new(),
         }
+    }
+
+    pub fn set_current_pet_index(&mut self, index: usize) {
+        self.current_pet_index = Some(index);
     }
 
     pub fn add_new_pet(&mut self, species_name: String) {
         self.pets.push(Joshagachi::new(
             format!("{}'s {species_name}", self.name),
             species_name.as_str(),
-        ))
+        ));
+        self.set_current_pet_index(self.pets.len() - 1);
     }
 
     pub fn add_pet(&mut self, pet: Joshagachi) {
@@ -134,6 +141,10 @@ impl Joshagachi {
             food_level: 0.0,
             energy_level: 0.0,
         }
+    }
+
+    pub fn set_name(&mut self, new_name: String) {
+        self.name = new_name
     }
 }
 

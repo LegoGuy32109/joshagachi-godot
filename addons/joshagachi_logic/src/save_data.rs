@@ -32,10 +32,9 @@ impl SaveData {
                     // not really an error
                     godot_print!("No save file present");
                     return Ok(SaveData::new());
-                } else {
-                    godot_error!("Issue opening save file: {error}");
                 }
 
+                godot_error!("Issue opening save file: {error}");
                 Err(error)
             }
         }
