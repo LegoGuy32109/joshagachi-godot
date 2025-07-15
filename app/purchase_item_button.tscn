@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://cegfeyxmo5yvu"]
+
+[ext_resource type="Theme" uid="uid://c5gt6ly7g54v0" path="res://app/item_button.tres" id="1_bmsy3"]
+[ext_resource type="Script" uid="uid://c013xf5sb61vk" path="res://app/purchase_item_button.gd" id="1_wlr6q"]
+
+[node name="Item" type="Button"]
+custom_minimum_size = Vector2(300, 300)
+theme = ExtResource("1_bmsy3")
+theme_override_font_sizes/font_size = 40
+script = ExtResource("1_wlr6q")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -125.0
+offset_right = 126.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Taco"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Price" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -50.0
+offset_right = 126.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.243137, 1, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "$1.40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -123.0
+offset_top = -20.0
+offset_right = 125.0
+offset_bottom = 147.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Simple and crunchy!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

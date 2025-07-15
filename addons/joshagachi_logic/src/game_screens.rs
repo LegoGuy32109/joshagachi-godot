@@ -200,6 +200,30 @@ impl GameScreens {
             default_scene.set("species", &species.to_string().to_variant());
             default_scene.set("title", &first_pet.name.to_variant());
 
+            // setup signals for menus on main / default scene
+            let shop_button: Gd<BaseButton> = default_scene.find_node("%shop_button");
+
+            let pressed_signal = shop_button.signals().pressed();
+            pressed_signal.connect_other(&self.to_gd(), move |game_screens: &mut Self| {
+                let shop_scene = load::<PackedScene>("uid://cljss8rtx37bb")
+                    .instantiate()
+                    .expect("no shop_scene found to be loaded");
+
+                // connect signal from exit button to come back here
+                let leave_shop_button: Gd<BaseButton> = shop_scene.find_node("%leave_shop_button");
+                leave_shop_button
+                    .signals()
+                    .pressed()
+                    .connect_other(game_screens, move |game_screens: &mut Self| {
+                        game_screens._on_start_game_button_pressed()
+                    });
+
+                game_screens
+                    .signals()
+                    .change_scenes()
+                    .emit(&shop_scene, Color::ROYAL_BLUE);
+            });
+
             // use methods on self after first_pet is finished being used
             self.user
                 .as_mut()

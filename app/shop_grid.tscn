@@ -1,0 +1,187 @@
+[gd_scene load_steps=4 format=3 uid="uid://cljss8rtx37bb"]
+
+[ext_resource type="Texture2D" uid="uid://c5cw3xh04032g" path="res://assets/Yummies.png" id="1_r827y"]
+[ext_resource type="PackedScene" uid="uid://cegfeyxmo5yvu" path="res://app/purchase_item_button.tscn" id="2_qdcsj"]
+[ext_resource type="Texture2D" uid="uid://cx5ot77ga7tmg" path="res://assets/Games.png" id="3_tbwfm"]
+
+[node name="shop_grid" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -356.5
+offset_top = -605.0
+offset_right = 356.5
+offset_bottom = 605.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_r827y")
+expand_mode = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 321.93)
+layout_mode = 2
+
+[node name="ItemContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="Item" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer" instance=ExtResource("2_qdcsj")]
+layout_mode = 2
+title = "Taco"
+price = 1.4
+description = "Simple and crunchy!"
+
+[node name="Item2" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer" instance=ExtResource("2_qdcsj")]
+layout_mode = 2
+title = "Cheeseburger"
+price = 1.0
+description = "What's more American?"
+
+[node name="Title" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item2" index="0"]
+text = "Cheeseburger"
+
+[node name="Price" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item2" index="1"]
+text = "$1.00"
+
+[node name="Description" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item2" index="2"]
+text = "What's more American?"
+
+[node name="Item3" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer" instance=ExtResource("2_qdcsj")]
+layout_mode = 2
+title = "Apple Pie"
+price = 1.0
+description = "This probably"
+
+[node name="Title" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item3" index="0"]
+text = "Apple Pie"
+
+[node name="Price" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item3" index="1"]
+text = "$1.00"
+
+[node name="Description" parent="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item3" index="2"]
+text = "This probably"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 35
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.66, 0.66, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.552941)
+theme_override_constants/shadow_offset_x = -5
+theme_override_constants/shadow_offset_y = 5
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/font_size = 70
+text = "Your Cash:"
+
+[node name="Cash" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.243137, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.364706)
+theme_override_constants/shadow_offset_x = 10
+theme_override_constants/shadow_offset_y = 10
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/font_size = 90
+text = "$0.00"
+
+[node name="leave_shop_button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.592157, 0.54902, 1)
+layout_mode = 2
+text = "Done
+Shoppin
+Thx!"
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("3_tbwfm")
+expand_mode = 5
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 321.93)
+layout_mode = 2
+
+[node name="ItemContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer2"]
+layout_mode = 2
+
+[node name="Item" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer" instance=ExtResource("2_qdcsj")]
+layout_mode = 2
+title = "Ball and Stick"
+price = 2.5
+description = "OG, everyone loves a classic"
+
+[node name="Title" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item" index="0"]
+text = "Ball and Stick"
+
+[node name="Price" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item" index="1"]
+text = "$2.50"
+
+[node name="Description" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item" index="2"]
+text = "OG, everyone loves a classic"
+
+[node name="Item2" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer" instance=ExtResource("2_qdcsj")]
+layout_mode = 2
+disabled = true
+title = "Hoop and Stick"
+price = 10.0
+description = "Ok NOW we're talking!"
+
+[node name="Title" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item2" index="0"]
+text = "Hoop and Stick"
+
+[node name="Price" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item2" index="1"]
+theme_override_colors/font_color = Color(0.67, 0, 0, 1)
+text = "$10.00"
+
+[node name="Description" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item2" index="2"]
+text = "Ok NOW we're talking!"
+
+[node name="Item3" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer" instance=ExtResource("2_qdcsj")]
+layout_mode = 2
+title = "Battleship"
+price = 3.0
+description = "You can lose some pieces, we got thousands"
+
+[node name="Title" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item3" index="0"]
+text = "Battleship"
+
+[node name="Price" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item3" index="1"]
+text = "$3.00"
+
+[node name="Description" parent="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item3" index="2"]
+text = "You can lose some pieces, we got thousands"
+
+[editable path="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item"]
+[editable path="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item2"]
+[editable path="MarginContainer/VBoxContainer/ScrollContainer/ItemContainer/Item3"]
+[editable path="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item"]
+[editable path="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item2"]
+[editable path="MarginContainer/VBoxContainer/ScrollContainer2/ItemContainer/Item3"]
