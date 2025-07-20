@@ -5,6 +5,7 @@ use std::fmt::Display;
 mod debug_properties;
 mod game_screens;
 mod save_data;
+mod scene_manager;
 mod user;
 
 struct MyExtension;

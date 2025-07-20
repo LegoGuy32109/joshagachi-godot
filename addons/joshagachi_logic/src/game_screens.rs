@@ -1,5 +1,6 @@
 use crate::debug_properties::DebugProperties;
 use crate::save_data::SaveData;
+use crate::scene_manager::{Scene, SceneManager};
 use crate::user::{Species, User};
 use crate::{FindNodeable, console_log};
 use godot::classes::tween::{EaseType, TransitionType};
@@ -17,6 +18,7 @@ pub struct GameScreens {
     screen_dimensions: Vector2,
     viewport_dimensions: Vector2,
     user: Option<User>,
+    scene_manager: SceneManager,
     base: Base<Control>,
 }
 
@@ -29,10 +31,13 @@ impl IControl for GameScreens {
         let viewport_height = project_settings.get_setting("display/window/size/viewport_height");
         let viewport_dimensions =
             Vector2i::new(viewport_width.to(), viewport_height.to()).cast_float();
+        let scene_manager = SceneManager::new();
+
         Self {
             screen_dimensions: display_server.screen_get_size().cast_float(),
             viewport_dimensions,
             user: None,
+            scene_manager,
             base,
         }
     }
@@ -190,10 +195,7 @@ impl GameScreens {
         // if a user was already loaded from save data, move straight to pet screen
         // TODO: better way of getting and setting selected_pet
         if let Some(first_pet) = self.user.as_mut().and_then(|user| user.pets.get(0)) {
-            // TODO: better way of loading scenes from uids
-            let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
-                .instantiate()
-                .expect("no default scene found to be loaded");
+            let mut default_scene = self.scene_manager.make_scene(Scene::DefaultPet);
 
             let species: &Species = &first_pet.species;
             let species_color = species.color();
@@ -205,9 +207,7 @@ impl GameScreens {
 
             let pressed_signal = shop_button.signals().pressed();
             pressed_signal.connect_other(&self.to_gd(), move |game_screens: &mut Self| {
-                let shop_scene = load::<PackedScene>("uid://cljss8rtx37bb")
-                    .instantiate()
-                    .expect("no shop_scene found to be loaded");
+                let shop_scene = game_screens.scene_manager.make_scene(Scene::Shop);
 
                 // connect signal from exit button to come back here
                 let leave_shop_button: Gd<BaseButton> = shop_scene.find_node("%leave_shop_button");
@@ -236,21 +236,15 @@ impl GameScreens {
         };
 
         // setup screens to get user information and make pet decision
-        let name_select_screen: Gd<Node> = load::<PackedScene>("uid://f6rye7ohvsw8")
-            .instantiate()
-            .expect("no name_select_screen found to be loaded");
+        let name_select_screen = self.scene_manager.make_scene(Scene::NameSelect);
 
         let name_confirm_button: Gd<BaseButton> =
             name_select_screen.find_node("%name_confirm_button");
         let name_line_edit: Gd<LineEdit> = name_select_screen.find_node("%name_line_edit");
 
-        // TODO: better way of connecting scene transition graph
-
         let pressed_signal = name_confirm_button.signals().pressed();
         pressed_signal.connect_other(&self.to_gd(), move |game_screens: &mut Self| {
-            let pet_list_node = load::<PackedScene>("uid://djadbqbt76p6g")
-                .instantiate()
-                .expect("no list_scene found to be loaded");
+            let pet_list_node = game_screens.scene_manager.make_scene(Scene::PetList);
             game_screens
                 .signals()
                 .change_scenes()
@@ -285,9 +279,7 @@ impl GameScreens {
 
     #[func]
     fn on_pet_chosen(&mut self, species_name: GString) {
-        let mut default_scene = load::<PackedScene>("uid://b4i5nrnfck28x")
-            .instantiate()
-            .expect("no default scene found to be loaded");
+        let mut default_scene = self.scene_manager.make_scene(Scene::DefaultPet);
         let species_name_string = species_name.to_string();
         let species = Species::from_str(&species_name_string).expect("couldn't determine species");
 
