@@ -1,9 +1,9 @@
-use godot::builtin::GString;
+use godot::builtin::{Color, GString};
 use godot::classes::{Node, PackedScene, ResourceLoader};
 use godot::global::godot_error;
-use godot::meta::ToGodot;
+use godot::meta::{FromGodot, ToGodot};
 use godot::obj::Gd;
-use godot::prelude::{Export, GodotConvert, Var};
+use godot::prelude::{ConvertError, Export, GodotConvert, Var};
 use std::collections::HashMap;
 use std::str::FromStr;
 
@@ -30,6 +30,13 @@ impl Var for Scene {
     }
 }
 
+impl FromGodot for Scene {
+    fn try_from_godot(via: Self::Via) -> Result<Self, godot::prelude::ConvertError> {
+        Scene::from_str(via.to_string().as_str())
+            .map_err(|_| ConvertError::new("Could not convert '{via}' to a scene"))
+    }
+}
+
 impl std::str::FromStr for Scene {
     type Err = ();
 
@@ -43,7 +50,6 @@ impl std::str::FromStr for Scene {
     }
 }
 
-
 impl Scene {
     pub fn info(&self) -> SceneInfo {
         match self {
@@ -51,21 +57,26 @@ impl Scene {
                 own_enum: Scene::DefaultPet,
                 uid: "uid://b4i5nrnfck28x",
                 name: "Default Pet",
+                // Dev species color
+                default_background_color: Color::from_html("#FA07CF").expect("invalid hexcode"),
             },
             Scene::Shop => SceneInfo {
                 own_enum: Scene::Shop,
                 uid: "uid://cljss8rtx37bb",
                 name: "Item Shop",
+                default_background_color: Color::ROYAL_BLUE,
             },
             Scene::NameSelect => SceneInfo {
                 own_enum: Scene::NameSelect,
                 uid: "uid://f6rye7ohvsw8",
                 name: "Name Select",
+                default_background_color: Color::PALE_GREEN,
             },
             Scene::PetList => SceneInfo {
                 own_enum: Scene::PetList,
                 uid: "uid://djadbqbt76p6g",
                 name: "Pet List",
+                default_background_color: Color::LIGHT_STEEL_BLUE, // or SKY_BLUE?
             },
         }
     }
@@ -83,9 +94,10 @@ impl Scene {
 }
 
 pub struct SceneInfo {
-    uid: &'static str,
-    name: &'static str,
-    own_enum: Scene,
+    pub uid: &'static str,
+    pub name: &'static str,
+    pub own_enum: Scene,
+    pub default_background_color: Color,
 }
 
 pub struct SceneManager {
@@ -115,7 +127,7 @@ impl SceneManager {
         scene_map
     }
 
-    pub fn make_scene(&self, scene: Scene) -> Gd<Node> {
+    pub fn make_scene(&self, scene: &Scene) -> Gd<Node> {
         let Some(packed_scene) = self.scene_map.get(&scene) else {
             panic!("Scene for {scene:?} not found");
         };
@@ -123,8 +135,6 @@ impl SceneManager {
             .instantiate()
             .expect("Failed to instantiate scene {scene:?}");
 
-        match scene {
-            _ => node,
-        }
+        node
     }
 }

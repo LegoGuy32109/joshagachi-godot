@@ -86,9 +86,37 @@ impl IControl for GameScreens {
 #[godot_api]
 impl GameScreens {
     #[signal]
-    fn change_scenes(new_focus_node: Gd<Node>, new_background_color: Color);
+    fn change_scenes(new_scene: GString);
 
-    fn _on_change_scenes(&mut self, mut new_focus_node: Gd<Node>, new_background_color: Color) {
+    fn _on_change_scenes(&mut self, new_scene: GString) {
+        godot_print!("{new_scene}");
+        let scene = Scene::from_godot(new_scene.clone());
+        let mut new_focus_node = self.scene_manager.make_scene(&scene);
+        // setup the new scene's signals and properties if needed
+        match scene {
+            Scene::NameSelect => {
+                let name_confirm_button: Gd<BaseButton> =
+                    new_focus_node.find_node("%name_confirm_button");
+                let name_line_edit: Gd<LineEdit> = new_focus_node.find_node("%name_line_edit");
+
+                name_confirm_button.signals().pressed().connect_other(
+                    &self.to_gd().upcast(),
+                    move |game_screens: &mut GameScreens| {
+                        game_screens
+                            .signals()
+                            .change_scenes()
+                            .emit(&Scene::PetList.to_godot());
+                        game_screens
+                            .signals()
+                            .user_name_chosen()
+                            .emit(&name_line_edit.get_text());
+                    },
+                );
+            }
+            Scene::PetList => {}
+            _ => godot_error!("Could not determine scene for {new_scene}"),
+        }
+
         let godot_ref = self.to_gd();
         // in seconds
         let duration = 1.0;
@@ -131,7 +159,7 @@ impl GameScreens {
         focused_screen_container.add_child(&new_focus_node);
         new_focus_node.set("global_position", new_focus_node_start_position);
 
-        self.change_background(new_background_color, duration);
+        self.change_background(scene.info().default_background_color, duration);
 
         let mut transition_anim_tween =
             self.create_tween(TransitionType::ELASTIC, EaseType::IN_OUT);
@@ -195,7 +223,7 @@ impl GameScreens {
         // if a user was already loaded from save data, move straight to pet screen
         // TODO: better way of getting and setting selected_pet
         if let Some(first_pet) = self.user.as_mut().and_then(|user| user.pets.get(0)) {
-            let mut default_scene = self.scene_manager.make_scene(Scene::DefaultPet);
+            let mut default_scene = self.scene_manager.make_scene(&Scene::DefaultPet);
 
             let species: &Species = &first_pet.species;
             let species_color = species.color();
@@ -207,7 +235,7 @@ impl GameScreens {
 
             let pressed_signal = shop_button.signals().pressed();
             pressed_signal.connect_other(&self.to_gd(), move |game_screens: &mut Self| {
-                let shop_scene = game_screens.scene_manager.make_scene(Scene::Shop);
+                let shop_scene = game_screens.scene_manager.make_scene(&Scene::Shop);
 
                 // connect signal from exit button to come back here
                 let leave_shop_button: Gd<BaseButton> = shop_scene.find_node("%leave_shop_button");
@@ -221,7 +249,7 @@ impl GameScreens {
                 game_screens
                     .signals()
                     .change_scenes()
-                    .emit(&shop_scene, Color::ROYAL_BLUE);
+                    .emit(&Scene::Shop.to_godot());
             });
 
             // use methods on self after first_pet is finished being used
@@ -231,33 +259,13 @@ impl GameScreens {
                 .set_current_pet_index(0);
             self.signals()
                 .change_scenes()
-                .emit(&default_scene, species_color);
+                .emit(&Scene::DefaultPet.to_godot());
             return;
         };
 
-        // setup screens to get user information and make pet decision
-        let name_select_screen = self.scene_manager.make_scene(Scene::NameSelect);
-
-        let name_confirm_button: Gd<BaseButton> =
-            name_select_screen.find_node("%name_confirm_button");
-        let name_line_edit: Gd<LineEdit> = name_select_screen.find_node("%name_line_edit");
-
-        let pressed_signal = name_confirm_button.signals().pressed();
-        pressed_signal.connect_other(&self.to_gd(), move |game_screens: &mut Self| {
-            let pet_list_node = game_screens.scene_manager.make_scene(Scene::PetList);
-            game_screens
-                .signals()
-                .change_scenes()
-                .emit(&pet_list_node, Color::LIGHT_STEEL_BLUE);
-            game_screens
-                .signals()
-                .user_name_chosen()
-                .emit(&name_line_edit.get_text());
-        });
-
         self.signals()
             .change_scenes()
-            .emit(&name_select_screen, Color::PALE_GREEN);
+            .emit(&Scene::NameSelect.to_godot());
     }
 
     fn change_background(&self, color: Color, duration: f64) {
@@ -279,7 +287,7 @@ impl GameScreens {
 
     #[func]
     fn on_pet_chosen(&mut self, species_name: GString) {
-        let mut default_scene = self.scene_manager.make_scene(Scene::DefaultPet);
+        let mut default_scene = self.scene_manager.make_scene(&Scene::DefaultPet);
         let species_name_string = species_name.to_string();
         let species = Species::from_str(&species_name_string).expect("couldn't determine species");
 
@@ -305,7 +313,8 @@ impl GameScreens {
                 // transition to new screen
                 self.signals()
                     .change_scenes()
-                    .emit(&default_scene, species.color());
+                    .emit(&Scene::DefaultPet.to_godot());
+                //.emit(&default_scene, species.color());
             }
             Err(error) => godot_error!("{error}"),
         }
